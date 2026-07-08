@@ -1,56 +1,123 @@
-<!doctype html><html lang="fr"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Gwent Companion</title>
-<link rel="stylesheet" href="style.css">
-<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
-</head><body>
-<div id="app">
-<h1>⚔️ Gwent Companion</h1>
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Gwent Companion</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+</head>
+<body>
+  <div id="app" class="app-shell">
+    <header class="hero-panel glass-panel">
+      <div>
+        <p class="eyebrow">Compagnon</p>
+        <h1>⚔️ Gwent Companion</h1>
+      </div>
+      <div class="hero-note">Interface premium inspirée de Gwent, optimisée pour mobile.</div>
+    </header>
 
-<div class="weather">
-<button v-for="w in weatherButtons" :class="{active:weather[w.id]}" @click="toggleWeather(w.id)">{{w.icon}}</button>
-<button @click="clearWeather">☀️</button>
-</div>
+    <section class="weather-panel glass-panel">
+      <div class="panel-title">
+        <span>Effets météo</span>
+      </div>
+      <div class="weather-buttons">
+        <button
+          v-for="w in weatherButtons"
+          :key="w.id"
+          :title="w.name"
+          :class="['weather-btn', {active: weather[w.id]}]"
+          @click="toggleWeather(w.id)">
+          {{w.icon}}
+        </button>
+        <button
+          class="weather-btn weather-clear"
+          title="Beau temps"
+          @click="clearWeather">
+          ☀️
+        </button>
+      </div>
+    </section>
 
-<div class="addGlobal">
-<h3>Ajouter une carte</h3>
-<select v-model="newCard.player">
-<option :value="1">Joueur 1</option>
-<option :value="2">Joueur 2</option>
-</select>
+    <section class="addGlobal glass-panel">
+      <div class="section-title">Ajouter une carte</div>
 
-<select v-model="newCard.row">
-<option value="melee">⚔️ Mêlée</option>
-<option value="range">🏹 Distance</option>
-<option value="siege">🏰 Siège</option>
-</select>
+      <div class="button-grid players">
+        <button :class="{selected:newCard.player===1}" @click="newCard.player=1">Joueur 1</button>
+        <button :class="{selected:newCard.player===2}" @click="newCard.player=2">Joueur 2</button>
+      </div>
 
-<input type="number" v-model.number="newCard.value" placeholder="Puissance">
+      <div class="button-grid rows">
+        <button :class="{selected:newCard.row==='melee'}" @click="newCard.row='melee'">⚔️</button>
+        <button :class="{selected:newCard.row==='range'}" @click="newCard.row='range'">🏹</button>
+        <button :class="{selected:newCard.row==='siege'}" @click="newCard.row='siege'">🏰</button>
+      </div>
 
-<select v-model="newCard.type">
-<option value="normal">Normale</option>
-<option value="hero">⭐ Héros</option>
-<option value="morale">💪 Moral</option>
-<option value="bond">🤝 Lien</option>
-</select>
+      <div class="button-grid types">
+        <button :class="{selected:newCard.type==='normal'}" @click="newCard.type='normal'">Normale</button>
+        <button :class="{selected:newCard.type==='hero'}" @click="newCard.type='hero'">⭐</button>
+        <button :class="{selected:newCard.type==='morale'}" @click="newCard.type='morale'">💪</button>
+        <button :class="{selected:newCard.type==='bond'}" @click="newCard.type='bond'">🤝</button>
+        <button :class="{selected:newCard.type==='jaskier'}" @click="newCard.type='jaskier'">🎭</button>
+      </div>
 
-<button @click="addCard">Ajouter</button>
-</div>
+      <div class="power-panel">
+        <span>Puissance</span>
+        <div class="power-controls">
+          <button @click="newCard.value = Math.max(1, newCard.value - 1)">-</button>
+          <span class="power-value">{{newCard.value}}</span>
+          <button @click="newCard.value = newCard.value + 1">+</button>
+        </div>
+      </div>
 
-<div class="player" v-for="p in players">
-<h2>Joueur {{p.id}} — {{playerTotal(p)}}</h2>
-<div class="row" v-for="r in rowsForPlayer(p)">
-<div><b>{{r.icon}} {{r.name}}</b>
-<label><input type="checkbox" v-model="p[r.id].horn"> 📯</label>
-</div>
-<div class="cards">
-<span class="card" v-for="(c,i) in p[r.id].cards" @click="removeCard(p,r.id,i)">
-{{icon(c)}} {{effective(c,p,r.id)}}
-</span>
-</div>
-<div>Total {{rowTotal(p,r.id)}}</div>
-</div>
-</div>
-</div>
-<script src="app.js"></script>
-</body></html>
+      <button class="add-button" @click="addCard">AJOUTER</button>
+    </section>
+
+    <section class="battlefield">
+      <div class="player-board glass-panel" v-for="p in players" :key="p.id">
+        <div class="player-header">
+          <div class="player-label">Joueur {{p.id}}</div>
+          <div class="player-score">{{playerTotal(p)}}</div>
+        </div>
+
+        <div class="row-panel" v-for="r in rowsForPlayer(p)" :key="r.id">
+          <div :class="['row-line', p.id===1 ? 'player-left' : 'player-right']">
+            <div class="line-cell line-horn">
+              <label class="horn-toggle">
+                <input type="checkbox" v-model="p[r.id].horn">
+                <span>📯</span>
+              </label>
+            </div>
+
+            <div class="line-cell line-icon">
+              <span class="row-icon">{{r.icon}}</span>
+            </div>
+
+            <div class="line-cell line-cards">
+              <div class="cards" :ref="el => setCardRowRef(el, p.id, r.id)">
+                <div
+                  class="card"
+                  v-for="(item, i) in displayedCards(p, r.id)"
+                  :key="item.index"
+                  @click="removeCard(p, r.id, item.index)">
+                  <div class="card-icon">{{icon(item.card)}}</div>
+                  <div class="card-value">{{effective(item.card, p, r.id)}}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="line-cell line-score">
+              <span class="score-value">{{rowTotal(p, r.id)}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="reset-area">
+      <button class="reset-btn" @click="resetGame">Reset</button>
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>

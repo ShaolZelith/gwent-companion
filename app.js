@@ -17,7 +17,9 @@ weatherButtons:[
 ],
 weather:{cold:false,fog:false,rain:false,tsunami:false},
 newCard:{player:1,row:"melee",value:1,type:"normal"},
-players:[]
+players:[],
+rowElements:{},
+rowWidths:{}
 }
 },
 created(){
@@ -30,32 +32,84 @@ siege:{cards:[],horn:false}
 });
 }
 },
+mounted(){
+  window.addEventListener('resize', this.updateRowWidths);
+  this.$nextTick(this.updateRowWidths);
+},
+unmounted(){
+  window.removeEventListener('resize', this.updateRowWidths);
+},
 methods:{
 
-rowsForPlayer(player){
-    // Joueur 1 affiché en haut
-    if(player.id===1){
-        return [...this.rows].reverse(); // Siège, Distance, Mêlée
-    }
-    // Joueur 2 affiché en bas
+rowsForPlayer(){
     return [...this.rows]; // Mêlée, Distance, Siège
 },
 
 icon(c){
-return {hero:"⭐",morale:"💪",bond:"🤝"}[c.type]||"";
+return {hero:"⭐",morale:"💪",bond:"🤝",jaskier:"🎭"}[c.type]||"";
 },
 toggleWeather(id){this.weather[id]=!this.weather[id]},
 clearWeather(){Object.keys(this.weather).forEach(k=>this.weather[k]=false)},
+resetGame(){
+  this.clearWeather();
+  this.players.forEach(p=>{
+    p.melee.cards=[];
+    p.melee.horn=false;
+    p.range.cards=[];
+    p.range.horn=false;
+    p.siege.cards=[];
+    p.siege.horn=false;
+  });
+  this.newCard = {player:1,row:'melee',value:1,type:'normal'};
+  this.$nextTick(this.updateRowWidths);
+},
 addCard(){
 const p=this.players[this.newCard.player-1];
 p[this.newCard.row].cards.push({value:this.newCard.value,type:this.newCard.type});
-this.newCard.value=1;
+this.newCard.value=this.newCard.type==="jaskier"?2:1;
+this.$nextTick(this.updateRowWidths);
 },
-removeCard(p,row,i){p[row].cards.splice(i,1)},
+removeCard(p,row,i){p[row].cards.splice(i,1); this.$nextTick(this.updateRowWidths);},
 weatherOnRow(row){
 return (row==="melee"&&this.weather.cold)||
 (row==="range"&&(this.weather.fog||this.weather.tsunami))||
 (row==="siege"&&(this.weather.rain||this.weather.tsunami));
+},
+hasJaskier(p,row){
+return p[row].cards.some(c=>c.type==="jaskier");
+},
+displayedCards(p,row){
+  const cards = p[row].cards.map((card,index)=>({card,index}));
+  const jaskiers = cards.filter(item=>item.card.type=== "jaskier");
+  const others = cards.filter(item=>item.card.type!== "jaskier");
+  return [...jaskiers, ...others];
+},
+setCardRowRef(el, playerId, rowId){
+  if(!el) return;
+  this.rowElements[`${playerId}-${rowId}`] = el;
+  this.rowWidths[`${playerId}-${rowId}`] = el.clientWidth;
+},
+updateRowWidths(){
+  Object.entries(this.rowElements).forEach(([key, el])=>{
+    if(el && el.clientWidth){
+      this.rowWidths[key] = el.clientWidth;
+    }
+  });
+},
+cardPosition(index, count, p, row){
+  const key = `${p.id}-${row}`;
+  const available = this.rowWidths[key] || 0;
+  const cardWidth = 50;
+  let spacing = cardWidth;
+  if(count > 1 && available > 0){
+    spacing = Math.min(cardWidth, (available - cardWidth) / (count - 1));
+  }
+  return {
+    position: 'absolute',
+    top: '0px',
+    left: `${Math.round(index * spacing)}px`,
+    zIndex: index + 1
+  };
 },
 effective(card,p,row){
 let v=card.value;
@@ -76,8 +130,14 @@ if(card.type==="bond"){
     if(n>1) v*=n;
 }
 
-// 4 cor (double tout sauf héros)
-if(p[row].horn && card.type!=="hero"){
+// 4 cor / Jaskier line doubling
+const lineDouble = (p[row].horn || this.hasJaskier(p,row)) && card.type!=="hero" && card.type!=="jaskier";
+if(lineDouble){
+    v*=2;
+}
+
+// 5 Jaskier doubled by horn only
+if(card.type==="jaskier" && p[row].horn){
     v*=2;
 }
 
