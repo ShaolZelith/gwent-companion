@@ -1,0 +1,2 @@
+body{font-family:Arial;background:#222;color:#fff;max-width:900px;margin:auto;padding:20px}.weather button{margin:4px}.active{background:#39f}.player{background:#333;padding:12px;margin:16px 0}.row{background:#444;padding:10px;margin:10px 0}.card{display:inline-block;background:#666;padding:8px;margin:4px;cursor:pointer}
+.addGlobal{background:#555;padding:12px;border-radius:8px;margin:15px 0;display:flex;gap:8px;flex-wrap:wrap}.addGlobal input,.addGlobal select,.addGlobal button{padding:8px}

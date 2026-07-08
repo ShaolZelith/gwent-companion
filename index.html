@@ -1,0 +1,56 @@
+<!doctype html><html lang="fr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gwent Companion</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+</head><body>
+<div id="app">
+<h1>⚔️ Gwent Companion</h1>
+
+<div class="weather">
+<button v-for="w in weatherButtons" :class="{active:weather[w.id]}" @click="toggleWeather(w.id)">{{w.icon}}</button>
+<button @click="clearWeather">☀️</button>
+</div>
+
+<div class="addGlobal">
+<h3>Ajouter une carte</h3>
+<select v-model="newCard.player">
+<option :value="1">Joueur 1</option>
+<option :value="2">Joueur 2</option>
+</select>
+
+<select v-model="newCard.row">
+<option value="melee">⚔️ Mêlée</option>
+<option value="range">🏹 Distance</option>
+<option value="siege">🏰 Siège</option>
+</select>
+
+<input type="number" v-model.number="newCard.value" placeholder="Puissance">
+
+<select v-model="newCard.type">
+<option value="normal">Normale</option>
+<option value="hero">⭐ Héros</option>
+<option value="morale">💪 Moral</option>
+<option value="bond">🤝 Lien</option>
+</select>
+
+<button @click="addCard">Ajouter</button>
+</div>
+
+<div class="player" v-for="p in players">
+<h2>Joueur {{p.id}} — {{playerTotal(p)}}</h2>
+<div class="row" v-for="r in rowsForPlayer(p)">
+<div><b>{{r.icon}} {{r.name}}</b>
+<label><input type="checkbox" v-model="p[r.id].horn"> 📯</label>
+</div>
+<div class="cards">
+<span class="card" v-for="(c,i) in p[r.id].cards" @click="removeCard(p,r.id,i)">
+{{icon(c)}} {{effective(c,p,r.id)}}
+</span>
+</div>
+<div>Total {{rowTotal(p,r.id)}}</div>
+</div>
+</div>
+</div>
+<script src="app.js"></script>
+</body></html>
