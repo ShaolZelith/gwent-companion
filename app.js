@@ -11,7 +11,7 @@ rows:[
 ],
 weatherButtons:[
 {id:"cold",icon:"❄️",name:"Froid"},
-{id:"fog",icon:"🌫️",name:"Brouillard"},
+{id:"fog",icon:"☁️",name:"Brouillard"},
 {id:"rain",icon:"🌧️",name:"Pluie"},
 {id:"tsunami",icon:"🌊",name:"Tsunami"}
 ],
@@ -75,6 +75,11 @@ return (row==="melee"&&this.weather.cold)||
 (row==="range"&&(this.weather.fog||this.weather.tsunami))||
 (row==="siege"&&(this.weather.rain||this.weather.tsunami));
 },
+isWeatherActiveRow(row){
+return (row==="melee"&&this.weather.cold)||
+((row==="range"&&(this.weather.fog||this.weather.tsunami))||
+(row==="siege"&&(this.weather.rain||this.weather.tsunami)));
+},
 hasJaskier(p,row){
 return p[row].cards.some(c=>c.type==="jaskier");
 },
@@ -99,16 +104,28 @@ updateRowWidths(){
 cardPosition(index, count, p, row){
   const key = `${p.id}-${row}`;
   const available = this.rowWidths[key] || 0;
-  const cardWidth = 50;
-  let spacing = cardWidth;
+  const baseWidth = 50;
+  const baseHeight = 70;
+  let cardWidth = baseWidth;
+  let cardHeight = baseHeight;
+  let spacing = baseWidth;
   if(count > 1 && available > 0){
-    spacing = Math.min(cardWidth, (available - cardWidth) / (count - 1));
+    const needed = count * baseWidth;
+    if(needed > available){
+      cardWidth = Math.max(28, Math.floor(available / count));
+      cardHeight = Math.round(cardWidth * baseHeight / baseWidth);
+      spacing = (available - cardWidth) / (count - 1);
+    }
   }
+  const scale = Math.max(0.56, cardWidth / baseWidth);
   return {
     position: 'absolute',
-    top: '0px',
+    top: `${Math.round((70 - cardHeight) / 2)}px`,
     left: `${Math.round(index * spacing)}px`,
-    zIndex: index + 1
+    width: `${cardWidth}px`,
+    height: `${cardHeight}px`,
+    zIndex: index + 1,
+    '--card-scale': scale
   };
 },
 effective(card,p,row){

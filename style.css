@@ -220,6 +220,22 @@ button{
   font-size:1.7rem;
   font-weight:800;
 }
+.power-input{
+  width:72px;
+  height:56px;
+  border-radius:18px;
+  background:rgba(255,255,255,0.08);
+  color:#f3ecd4;
+  font-size:1.4rem;
+  font-weight:800;
+  text-align:center;
+  border:1px solid rgba(255,255,255,0.14);
+}
+.power-input::-webkit-inner-spin-button,
+.power-input::-webkit-outer-spin-button{
+  -webkit-appearance:none;
+  margin:0;
+}
 .power-value{
   min-width:60px;
   text-align:center;
@@ -285,6 +301,23 @@ button{
   width:100%;
   grid-template-columns:40px 40px minmax(0,1fr) 60px;
   gap:8px;
+  transition:all .25s ease;
+}
+.row-line.weather-active-row{
+  position:relative;
+  border-radius:18px;
+  padding:8px 10px;
+  background:linear-gradient(90deg, rgba(72,145,255,0.18) 0%, rgba(110,210,255,0.1) 50%, rgba(51,111,255,0.2) 100%);
+  border:1px solid rgba(118,198,255,0.6);
+  box-shadow:0 0 0 1px rgba(116,196,255,0.2), 0 0 24px rgba(77,161,255,0.36), inset 0 0 18px rgba(121,203,255,0.16);
+}
+.row-line.weather-active-row .line-icon .row-icon{
+  background:rgba(120,210,255,0.22);
+  box-shadow:0 0 18px rgba(97,179,255,0.28);
+}
+.row-line.weather-active-row .score-value{
+  color:#bfe8ff;
+  text-shadow:0 0 16px rgba(94,183,255,0.3);
 }
 .player-right .row-line{
   grid-template-columns:60px minmax(0,1fr) 40px 40px;
@@ -310,8 +343,8 @@ button{
 .line-cards{
   min-width:0;
   width:100%;
-}
-.line-score{
+  display:flex;
+  align-items:center;
 }
 .score-value{
   font-size:2.4rem;
@@ -331,17 +364,19 @@ button{
   display:none;
 }
 .cards{
-  display:flex;
-  align-items:center;
+  position:relative;
   width:100%;
   min-width:0;
-  height:90px;
-  gap:8px;
+  height:70px;
+  overflow:hidden;
 }
 .card{
   width:50px;
   height:70px;
-  position:relative;
+  position:absolute;
+  top:0;
+  bottom:0;
+  margin:auto 0;
   border-radius:16px;
   background:linear-gradient(180deg, rgba(255,255,255,0.14), rgba(0,0,0,0.38));
   border:1px solid rgba(255,255,255,0.14);
@@ -354,17 +389,17 @@ button{
   padding:8px 6px;
   color:#f7e4a6;
   text-shadow:0 0 8px rgba(0,0,0,0.24);
-  transition:transform .2s ease, box-shadow .2s ease;
+  transition:transform .2s ease, box-shadow .2s ease, width .2s ease, height .2s ease;
 }
 .card:hover{
   transform:translateY(-4px);
   box-shadow:0 20px 38px rgba(0,0,0,0.34);
 }
 .card-icon{
-  font-size:1.35rem;
+  font-size:calc(1.35rem * var(--card-scale, 1));
 }
 .card-value{
-  font-size:1.8rem;
+  font-size:calc(1.8rem * var(--card-scale, 1));
   font-weight:900;
   color:#ffdb6e;
 }
