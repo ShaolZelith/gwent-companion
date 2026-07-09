@@ -90,7 +90,7 @@
             <div class="line-cell line-horn">
               <label class="horn-toggle">
                 <input type="checkbox" v-model="p[r.id].horn">
-                <span>📯</span>
+                <span :class="{active: p[r.id].horn}">📯</span>
               </label>
             </div>
 

@@ -135,16 +135,16 @@ let v=card.value;
 if(card.type!=="hero" && this.weatherOnRow(row))
     v=1;
 
-// 2 moral
-const moraleCards=p[row].cards.filter(c=>c.type==="morale").length;
-if(card.type!=="hero" && moraleCards>0){
-    v+=moraleCards-(card.type==="morale"?1:0);
-}
-
-// 3 lien serré
+// 2 lien serré
 if(card.type==="bond"){
     const n=p[row].cards.filter(c=>c.type==="bond"&&c.value===card.value).length;
     if(n>1) v*=n;
+}
+
+// 3 moral
+const moraleCards=p[row].cards.filter(c=>c.type==="morale").length;
+if(card.type!=="hero" && moraleCards>0){
+    v+=moraleCards-(card.type==="morale"?1:0);
 }
 
 // 4 cor / Jaskier line doubling
