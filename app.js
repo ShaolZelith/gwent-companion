@@ -49,8 +49,8 @@ rowsForPlayer(){
 icon(c){
 return {hero:"⭐",morale:"💪",bond:"🤝",jaskier:"🎭"}[c.type]||"";
 },
-toggleWeather(id){this.weather[id]=!this.weather[id]},
-clearWeather(){Object.keys(this.weather).forEach(k=>this.weather[k]=false)},
+toggleWeather(id){this.weather[id]=!this.weather[id]; this.$nextTick(()=>setTimeout(this.updateRowWidths, 50))},
+clearWeather(){Object.keys(this.weather).forEach(k=>this.weather[k]=false); this.$nextTick(()=>setTimeout(this.updateRowWidths, 50))},
 resetGame(){
   this.clearWeather();
   this.players.forEach(p=>{
@@ -110,25 +110,34 @@ return p[row].cards.some(c=>c.type==="jaskier");
 },
 displayedCards(p,row){
   const cards = p[row].cards.map((card,index)=>({card,index}));
-  const specialCards = cards.filter(item=>item.card.type!== "normal");
-  const normalCards = cards.filter(item=>item.card.type=== "normal");
-  return [...specialCards, ...normalCards];
+  const jaskierCards = cards.filter(item=>item.card.type==="jaskier");
+  const otherCards = cards.filter(item=>item.card.type!=="jaskier");
+  return [...jaskierCards, ...otherCards];
 },
 setCardRowRef(el, playerId, rowId){
   if(!el) return;
   this.rowElements[`${playerId}-${rowId}`] = el;
-  this.rowWidths[`${playerId}-${rowId}`] = el.clientWidth;
+  if(el.clientWidth > 0){
+    this.rowWidths[`${playerId}-${rowId}`] = el.clientWidth;
+  }
 },
 updateRowWidths(){
   Object.entries(this.rowElements).forEach(([key, el])=>{
-    if(el && el.clientWidth){
+    if(el && el.clientWidth > 0){
       this.rowWidths[key] = el.clientWidth;
     }
   });
 },
 cardPosition(index, count, p, row){
   const key = `${p.id}-${row}`;
-  const available = this.rowWidths[key] || 0;
+  let available = this.rowWidths[key] || 0;
+  
+  // Recalculer directement depuis le DOM pour éviter les valeurs en cache qui seraient fausses
+  const el = this.rowElements[key];
+  if(el && el.clientWidth > 0){
+    available = el.clientWidth;
+  }
+  
   const baseWidth = 50;
   const baseHeight = 70;
   let cardWidth = baseWidth;
