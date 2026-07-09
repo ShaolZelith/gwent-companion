@@ -9,13 +9,18 @@
 </head>
 <body>
   <div id="app" class="app-shell">
-    <header class="hero-panel glass-panel">
+    <header class="hero-panel glass-panel hero-center">
       <div>
-        <p class="eyebrow">Compagnon</p>
         <h1>⚔️ Gwent Companion</h1>
       </div>
-      <div class="hero-note">Interface premium inspirée de Gwent, optimisée pour mobile.</div>
     </header>
+
+    <div class="header-actions">
+      <button class="label-edit-btn" @click="openLabelModal">
+        <span class="icon">📜</span>
+        <span>Personnaliser la partie</span>
+      </button>
+    </div>
 
     <section class="weather-panel glass-panel">
       <div class="panel-title">
@@ -43,8 +48,8 @@
       <div class="section-title">Ajouter une carte</div>
 
       <div class="button-grid players">
-        <button :class="{selected:newCard.player===1}" @click="newCard.player=1">Joueur 1</button>
-        <button :class="{selected:newCard.player===2}" @click="newCard.player=2">Joueur 2</button>
+        <button :class="{selected:newCard.player===1}" @click="newCard.player=1">{{playerNames[0]}}</button>
+        <button :class="{selected:newCard.player===2}" @click="newCard.player=2">{{playerNames[1]}}</button>
       </div>
 
       <div class="button-grid rows">
@@ -54,21 +59,32 @@
       </div>
 
       <div class="button-grid types">
-        <button :class="{selected:newCard.type==='normal'}" @click="newCard.type='normal'">Normale</button>
+        <button :class="{selected:newCard.type==='normal'}" @click="newCard.type='normal'">👤</button>
         <button :class="{selected:newCard.type==='hero'}" @click="newCard.type='hero'">⭐</button>
         <button :class="{selected:newCard.type==='morale'}" @click="newCard.type='morale'">💪</button>
         <button :class="{selected:newCard.type==='bond'}" @click="newCard.type='bond'">🤝</button>
         <button :class="{selected:newCard.type==='jaskier'}" @click="newCard.type='jaskier'">🎭</button>
       </div>
 
-      <div class="power-panel">
-        <span>Puissance</span>
+      <div class="power-label">Puissance</div>
+
+      <div class="button-grid presets">
+        <button
+          v-for="power in powerPresets"
+          :key="power"
+          :class="{selected:newCard.value===power}"
+          @click="newCard.value = power">
+          {{power}}
+        </button>
+      </div>
+
+      <div class="power-panel centered">
         <div class="power-controls">
           <button @click="newCard.value = Math.max(1, newCard.value - 1)">-</button>
           <input
             class="power-input"
             type="number"
-            min="1"
+            min="0"
             v-model.number="newCard.value"
           >
           <button @click="newCard.value = newCard.value + 1">+</button>
@@ -81,7 +97,7 @@
     <section class="battlefield">
       <div class="player-board glass-panel" v-for="p in players" :key="p.id">
         <div class="player-header">
-          <div class="player-label">Joueur {{p.id}}</div>
+          <div class="player-label">{{playerNames[p.id - 1]}}</div>
           <div class="player-score">{{playerTotal(p)}}</div>
         </div>
 
@@ -122,6 +138,29 @@
 
     <div class="reset-area">
       <button class="reset-btn" @click="resetGame">Reset</button>
+    </div>
+
+    <div class="modal-overlay" v-if="showLabelModal" @click.self="closeLabelModal">
+      <div class="label-modal" @click.stop>
+        <div class="modal-title">
+          <span class="icon">📜</span>
+          <span>Personnaliser la partie</span>
+        </div>
+        <div class="modal-body">
+          <div class="modal-field">
+            <label for="player1-name">Nom du Joueur 1</label>
+            <input id="player1-name" type="text" v-model="labelModal.player1" maxlength="20" />
+          </div>
+          <div class="modal-field">
+            <label for="player2-name">Nom du Joueur 2</label>
+            <input id="player2-name" type="text" v-model="labelModal.player2" maxlength="20" />
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="modal-btn cancel" @click="closeLabelModal">Annuler</button>
+          <button class="modal-btn save" @click="saveLabelModal">Valider</button>
+        </div>
+      </div>
     </div>
   </div>
   <script src="app.js"></script>

@@ -15,8 +15,7 @@ weatherButtons:[
 {id:"rain",icon:"🌧️",name:"Pluie"},
 {id:"tsunami",icon:"🌊",name:"Tsunami"}
 ],
-weather:{cold:false,fog:false,rain:false,tsunami:false},
-newCard:{player:1,row:"melee",value:1,type:"normal"},
+weather:{cold:false,fog:false,rain:false,tsunami:false},powerPresets:[0,1,2,3,4,5,6,7,8,10,15],playerNames:["Joueur 1","Joueur 2"],showLabelModal:false,labelModal:{player1:"Joueur 1",player2:"Joueur 2"},newCard:{player:1,row:"melee",value:1,type:"normal"},
 players:[],
 rowElements:{},
 rowWidths:{}
@@ -34,10 +33,12 @@ siege:{cards:[],horn:false}
 },
 mounted(){
   window.addEventListener('resize', this.updateRowWidths);
+  window.addEventListener('keydown', this.handleKeydown);
   this.$nextTick(this.updateRowWidths);
 },
 unmounted(){
   window.removeEventListener('resize', this.updateRowWidths);
+  window.removeEventListener('keydown', this.handleKeydown);
 },
 methods:{
 
@@ -63,6 +64,30 @@ resetGame(){
   this.newCard = {player:1,row:'melee',value:1,type:'normal'};
   this.$nextTick(this.updateRowWidths);
 },
+openLabelModal(){
+  this.labelModal.player1 = this.playerNames[0];
+  this.labelModal.player2 = this.playerNames[1];
+  this.showLabelModal = true;
+},
+closeLabelModal(){
+  this.showLabelModal = false;
+},
+saveLabelModal(){
+  const newName1 = this.labelModal.player1.trim().slice(0,20);
+  const newName2 = this.labelModal.player2.trim().slice(0,20);
+  if(newName1.length > 0){
+    this.playerNames[0] = newName1;
+  }
+  if(newName2.length > 0){
+    this.playerNames[1] = newName2;
+  }
+  this.closeLabelModal();
+},
+handleKeydown(event){
+  if(event.key === 'Escape' && this.showLabelModal){
+    this.closeLabelModal();
+  }
+},
 addCard(){
 const p=this.players[this.newCard.player-1];
 p[this.newCard.row].cards.push({value:this.newCard.value,type:this.newCard.type});
@@ -85,9 +110,9 @@ return p[row].cards.some(c=>c.type==="jaskier");
 },
 displayedCards(p,row){
   const cards = p[row].cards.map((card,index)=>({card,index}));
-  const jaskiers = cards.filter(item=>item.card.type=== "jaskier");
-  const others = cards.filter(item=>item.card.type!== "jaskier");
-  return [...jaskiers, ...others];
+  const specialCards = cards.filter(item=>item.card.type!== "normal");
+  const normalCards = cards.filter(item=>item.card.type=== "normal");
+  return [...specialCards, ...normalCards];
 },
 setCardRowRef(el, playerId, rowId){
   if(!el) return;

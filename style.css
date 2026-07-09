@@ -54,10 +54,130 @@ button{
   align-items:flex-start;
   gap:20px;
 }
+.hero-panel.hero-center{
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+}
+.hero-panel.hero-center > div{
+  width:auto;
+}
 .hero-panel h1{
   margin:0;
   font-size:clamp(2rem,4vw,3.8rem);
   letter-spacing:0.04em;
+}
+.header-actions{
+  display:flex;
+  justify-content:center;
+  margin:20px 0;
+}
+.label-edit-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:12px 18px;
+  border-radius:18px;
+  background:linear-gradient(180deg, rgba(55,37,21,0.95), rgba(27,16,10,0.98));
+  border:1px solid rgba(202,167,90,0.24);
+  color:#efe5cf;
+  font-weight:700;
+  letter-spacing:0.06em;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.06), 0 12px 22px rgba(0,0,0,0.28);
+  transition:transform .25s ease,box-shadow .25s ease,background .25s ease;
+}
+.label-edit-btn:hover{
+  transform:translateY(-1px) scale(1.01);
+  box-shadow:0 14px 26px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.1);
+  border-color:rgba(202,167,90,0.45);
+}
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  backdrop-filter:blur(2px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  z-index:50;
+}
+.label-modal{
+  width:min(560px,100%);
+  background:linear-gradient(180deg, #2a1d14, #1a1008 55%, #26160c);
+  border:1px solid rgba(202,167,90,0.34);
+  box-shadow:0 20px 60px rgba(0,0,0,0.45), inset 0 0 20px rgba(255,255,255,0.04);
+  border-radius:28px;
+  overflow:hidden;
+  animation:modalPop .24s ease;
+}
+.modal-title{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:24px 24px 18px;
+  border-bottom:1px solid rgba(202,167,90,0.18);
+  color:#efe5cf;
+  font-size:1.1rem;
+  font-weight:700;
+  letter-spacing:0.08em;
+}
+.modal-body{
+  padding:20px 24px 22px;
+  display:grid;
+  gap:18px;
+}
+.modal-field{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.modal-field label{
+  color:#cdbf9d;
+  font-size:0.95rem;
+  letter-spacing:0.04em;
+}
+.modal-field input{
+  width:100%;
+  border-radius:16px;
+  border:1px solid rgba(202,167,90,0.18);
+  background:#18110d;
+  color:#efe5cf;
+  padding:14px 16px;
+  font-size:1rem;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.05);
+}
+.modal-actions{
+  display:flex;
+  gap:14px;
+  justify-content:flex-end;
+  padding:0 24px 24px;
+}
+.modal-btn{
+  min-width:100px;
+  padding:12px 16px;
+  border-radius:16px;
+  font-weight:700;
+  letter-spacing:0.06em;
+  transition:transform .25s ease,box-shadow .25s ease,background .25s ease;
+}
+.modal-btn.cancel{
+  background:linear-gradient(180deg, rgba(42,32,23,0.95), rgba(18,12,8,0.98));
+  color:#efe5cf;
+  border:1px solid rgba(202,167,90,0.14);
+}
+.modal-btn.save{
+  background:linear-gradient(180deg, rgba(202,167,90,0.95), rgba(147,110,50,0.95));
+  color:#261700;
+  border:1px solid rgba(255,255,255,0.18);
+}
+.modal-btn:hover{
+  transform:translateY(-1px);
+}
+@keyframes modalPop{
+  from{transform:scale(0.98); opacity:0;}
+  to{transform:scale(1); opacity:1;}
 }
 .eyebrow{
   margin:0 0 8px;
@@ -180,20 +300,33 @@ button{
 .button-grid.types{
   grid-template-columns:repeat(5,1fr);
 }
+.button-grid.presets{
+  grid-template-columns:repeat(11,minmax(0,1fr));
+}
 .button-grid button{
-  min-height:64px;
+  min-height:54px;
   border-radius:18px;
   background:rgba(255,255,255,0.06);
   color:#f3ecd4;
   font-weight:700;
-  font-size:1rem;
+  font-size:0.95rem;
   transition:all .25s ease;
+}
+.button-grid.presets button{
+  min-height:48px;
+  font-size:0.88rem;
 }
 .button-grid button.selected,
 .button-grid button:hover{
   background:rgba(255,215,115,0.15);
   border:1px solid rgba(255,215,115,0.28);
   color:#ffdf8a;
+}
+.power-label{
+  font-size:1rem;
+  font-weight:700;
+  margin-bottom:14px;
+  text-align:center;
 }
 .power-panel{
   display:flex;
@@ -202,9 +335,10 @@ button{
   gap:20px;
   margin-bottom:18px;
 }
-.power-panel span{
-  font-size:1rem;
-  font-weight:700;
+.power-panel.centered{
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
 }
 .power-controls{
   display:flex;
