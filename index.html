@@ -162,19 +162,34 @@
           </div>
         </div>
 
-        <div class="player-action-row" v-if="isMonsterFaction(p.id)">
-          <button
-            class="monster-random-btn"
-            :disabled="!hasMonsterUnitCandidates(p.id)"
-            @click="resetToRandomMonsterCard(p.id)">
-            Garder une unité aléatoire
-          </button>
-        </div>
+        <!-- player action buttons moved below the battlefield to keep boards visually framed -->
       </div>
     </section>
 
-    <div class="reset-area">
-      <button class="reset-btn" @click="resetGame">Reset</button>
+    <div class="controls-row">
+      <div class="controls-left">
+        <button
+          v-if="isMonsterFaction(1)"
+          class="monster-random-btn"
+          :disabled="!hasMonsterUnitCandidates(1)"
+          @click="resetToRandomMonsterCard(1)">
+          Garder une unité aléatoire
+        </button>
+      </div>
+
+      <div class="controls-center">
+        <button class="reset-btn" @click="resetGame">Reset</button>
+      </div>
+
+      <div class="controls-right">
+        <button
+          v-if="isMonsterFaction(2)"
+          class="monster-random-btn"
+          :disabled="!hasMonsterUnitCandidates(2)"
+          @click="resetToRandomMonsterCard(2)">
+          Garder une unité aléatoire
+        </button>
+      </div>
     </div>
 
     <div class="modal-overlay" v-if="showLabelModal" @click.self="closeLabelModal">

@@ -107,6 +107,29 @@ hasMonsterUnitCandidates(playerId){
 },
 resetToRandomMonsterCard(playerId){
   if(!this.isMonsterFaction(playerId)) return;
+
+  const bothMonsters = this.isMonsterFaction(1) && this.isMonsterFaction(2);
+
+  // If both players are Monsters, clicking either button makes BOTH players draw a random unit
+  if(bothMonsters){
+    const savedChoices = [];
+    for(let pid = 1; pid <= 2; pid++){
+      const candidates = this.monsterUnitCandidates(pid);
+      if(candidates.length === 0) continue;
+      const choice = candidates[Math.floor(Math.random() * candidates.length)];
+      savedChoices.push({ playerId: pid, card: {...choice.card}, row: choice.row });
+    }
+    if(savedChoices.length === 0) return;
+    this.resetGame();
+    savedChoices.forEach(sc => {
+      const player = this.players[sc.playerId - 1];
+      player[sc.row].cards.push(sc.card);
+    });
+    this.$nextTick(this.updateRowWidths);
+    return;
+  }
+
+  // Default behaviour: only affect the clicked player
   const candidates = this.monsterUnitCandidates(playerId);
   if(candidates.length === 0) return;
   const choice = candidates[Math.floor(Math.random() * candidates.length)];
