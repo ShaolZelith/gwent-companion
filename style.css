@@ -92,6 +92,111 @@ button{
   box-shadow:0 14px 26px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.1);
   border-color:rgba(202,167,90,0.45);
 }
+.coin-panel{
+  padding:20px 22px;
+}
+.coin-area{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:14px;
+  text-align:center;
+}
+.coin-token{
+  width:132px;
+  height:132px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,0.18);
+  background:radial-gradient(circle at top left, rgba(255,255,215,0.18), rgba(255,215,115,0.10));
+  color:#ffd765;
+  text-shadow:0 0 10px rgba(255,215,101,0.45);
+  font-size:1.05rem;
+  font-weight:900;
+  letter-spacing:0.08em;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 16px 24px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.15);
+  transition:transform .25s ease, border .25s ease, background .25s ease;
+}
+.coin-token:hover{
+  transform:translateY(-2px);
+}
+.coin-token.flip{
+  animation:coinSpin 0.52s ease-in-out;
+}
+.coin-hint{
+  color:rgba(243,236,212,0.72);
+  font-size:0.95rem;
+}
+.faction-panel{
+  margin-top:22px;
+}
+.faction-buttons{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:16px;
+  margin-top:14px;
+}
+.faction-token{
+  width:108px;
+  min-width:108px;
+  height:108px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,0.14);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:12px;
+  text-align:center;
+  font-weight:800;
+  letter-spacing:0.02em;
+  transition:transform .25s ease, box-shadow .25s ease;
+}
+.faction-token:hover{
+  transform:translateY(-2px);
+}
+.faction-token-name{
+  font-size:0.92rem;
+  line-height:1.2;
+}
+.faction-token-slot{
+  margin-top:8px;
+  font-size:0.80rem;
+  opacity:0.78;
+}
+.faction-token.nilfgaard{
+  background:linear-gradient(135deg,#14140f,#31210d);
+  color:#ffd765;
+  border-color:rgba(255,215,101,0.3);
+}
+.faction-token.northern{
+  background:linear-gradient(135deg,#112344,#23436a);
+  color:#d8e6ff;
+  border-color:rgba(173,199,255,0.3);
+}
+.faction-token.skellige{
+  background:linear-gradient(135deg,#3d2854,#6f4c9b);
+  color:#d7c8ff;
+  border-color:rgba(191,176,255,0.3);
+}
+.faction-token.scoiatel{
+  background:linear-gradient(135deg,#1f3f24,#3d6f3f);
+  color:#ffd765;
+  border-color:rgba(255,215,101,0.3);
+}
+.faction-token.monsters{
+  background:linear-gradient(135deg,#4f1016,#8b1d2b);
+  color:#d8e6ff;
+  border-color:rgba(173,199,255,0.3);
+}
+@keyframes coinSpin{
+  0%{transform:rotate(0deg);}
+  50%{transform:rotate(180deg);}
+  100%{transform:rotate(360deg);}
+}
 .modal-overlay{
   position:fixed;
   inset:0;
@@ -220,7 +325,9 @@ button{
 }
 .reset-area{
   display:flex;
+  flex-wrap:wrap;
   justify-content:center;
+  gap:16px;
   margin-top:16px;
 }
 .reset-btn{
@@ -239,6 +346,31 @@ button{
 .reset-btn:hover{
   transform:translateY(-2px);
   background:linear-gradient(135deg, rgba(181,144,64,0.95), rgba(92,67,30,0.95));
+}
+.player-action-row{
+  display:flex;
+  justify-content:center;
+  padding:12px 0 4px;
+}
+.monster-random-btn{
+  min-width:220px;
+  padding:12px 20px;
+  border-radius:20px;
+  background:linear-gradient(135deg, rgba(211,88,87,0.95), rgba(148,45,49,0.95));
+  color:#f7e4a6;
+  font-weight:800;
+  letter-spacing:0.04em;
+  border:1px solid rgba(255,147,147,0.25);
+  box-shadow:0 12px 22px rgba(0,0,0,0.22);
+  transition:transform .25s ease, box-shadow .25s ease, background .25s ease;
+}
+.monster-random-btn:hover:not(:disabled){
+  transform:translateY(-1px);
+  box-shadow:0 10px 14px rgba(255,80,80,0.25);
+}
+.monster-random-btn:disabled{
+  opacity:0.5;
+  cursor:not-allowed;
 }
 .weather-btn{
   width:72px;
@@ -301,7 +433,7 @@ button{
   grid-template-columns:repeat(5,1fr);
 }
 .button-grid.presets{
-  grid-template-columns:repeat(11,minmax(0,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(0,1fr));
 }
 .button-grid button{
   min-height:54px;
@@ -404,6 +536,76 @@ button{
   min-width:0;
   max-width:100%;
 }
+.player-board.faction-board-nilfgaard{
+  background:linear-gradient(180deg, rgba(16,13,8,0.92), rgba(10,9,6,0.96));
+  border-color:rgba(255,215,101,0.22);
+  box-shadow:0 12px 30px rgba(0,0,0,0.22), inset 0 0 0 1px rgba(255,215,101,0.06);
+}
+.player-board.faction-board-northern{
+  background:linear-gradient(180deg, rgba(10,18,35,0.90), rgba(7,11,18,0.96));
+  border-color:rgba(173,199,255,0.20);
+  box-shadow:0 12px 30px rgba(0,0,0,0.22), inset 0 0 0 1px rgba(173,199,255,0.06);
+}
+.player-board.faction-board-skellige{
+  background:linear-gradient(180deg, rgba(26,18,44,0.90), rgba(12,7,19,0.96));
+  border-color:rgba(191,176,255,0.20);
+  box-shadow:0 12px 30px rgba(0,0,0,0.22), inset 0 0 0 1px rgba(191,176,255,0.06);
+}
+.player-board.faction-board-scoiatel{
+  background:linear-gradient(180deg, rgba(14,38,18,0.90), rgba(7,20,9,0.96));
+  border-color:rgba(87,202,118,0.28);
+  box-shadow:0 12px 30px rgba(0,0,0,0.22), inset 0 0 0 1px rgba(87,202,118,0.06);
+}
+.player-board.faction-board-monsters{
+  background:linear-gradient(180deg, rgba(64,11,14,0.90), rgba(32,7,9,0.96));
+  border-color:rgba(247,95,94,0.28);
+  box-shadow:0 12px 30px rgba(0,0,0,0.22), inset 0 0 0 1px rgba(247,95,94,0.06);
+}
+.player-board.faction-board-nilfgaard .player-score,
+.player-board.faction-board-nilfgaard .score-value{
+  color:#ffd765;
+  text-shadow:0 0 24px rgba(255,215,101,0.35);
+}
+.player-board.faction-board-northern .player-score,
+.player-board.faction-board-northern .score-value{
+  color:#bfe8ff;
+  text-shadow:0 0 24px rgba(135,187,255,0.35);
+}
+.player-board.faction-board-skellige .player-score,
+.player-board.faction-board-skellige .score-value{
+  color:#d7c8ff;
+  text-shadow:0 0 24px rgba(173,150,255,0.35);
+}
+.player-board.faction-board-scoiatel .player-score,
+.player-board.faction-board-scoiatel .score-value{
+  color:#ffd765;
+  text-shadow:0 0 24px rgba(255,215,101,0.35);
+}
+.player-board.faction-board-monsters .player-score,
+.player-board.faction-board-monsters .score-value{
+  color:#d8e6ff;
+  text-shadow:0 0 24px rgba(173,187,255,0.35);
+}
+.score-secondary-nilfgaard{
+  color:#ffd765 !important;
+  text-shadow:0 0 24px rgba(255,215,101,0.35);
+}
+.score-secondary-northern{
+  color:#bfe8ff !important;
+  text-shadow:0 0 24px rgba(135,187,255,0.35);
+}
+.score-secondary-skellige{
+  color:#d7c8ff !important;
+  text-shadow:0 0 24px rgba(173,150,255,0.35);
+}
+.score-secondary-scoiatel{
+  color:#ffd765 !important;
+  text-shadow:0 0 24px rgba(255,215,101,0.35);
+}
+.score-secondary-monsters{
+  color:#d8e6ff !important;
+  text-shadow:0 0 24px rgba(173,187,255,0.35);
+}
 .player-header{
   display:flex;
   justify-content:space-between;
@@ -421,6 +623,26 @@ button{
   font-weight:900;
   color:#ffd765;
   text-shadow:0 0 24px rgba(255,215,101,0.35);
+}
+.player-board.faction-board-nilfgaard .player-score,
+.player-board.faction-board-nilfgaard .score-value{
+  color:#ffd765 !important;
+}
+.player-board.faction-board-northern .player-score,
+.player-board.faction-board-northern .score-value{
+  color:#bfe8ff !important;
+}
+.player-board.faction-board-skellige .player-score,
+.player-board.faction-board-skellige .score-value{
+  color:#d7c8ff !important;
+}
+.player-board.faction-board-scoiatel .player-score,
+.player-board.faction-board-scoiatel .score-value{
+  color:#7cd87a !important;
+}
+.player-board.faction-board-monsters .player-score,
+.player-board.faction-board-monsters .score-value{
+  color:#ff7b7b !important;
 }
 .row-panel{
   border-top:1px solid rgba(255,255,255,0.08);
@@ -450,7 +672,6 @@ button{
   box-shadow:0 0 18px rgba(97,179,255,0.28);
 }
 .row-line.weather-active-row .score-value{
-  color:#bfe8ff;
   text-shadow:0 0 16px rgba(94,183,255,0.3);
 }
 .player-right .row-line{
@@ -550,6 +771,46 @@ button{
   font-size:calc(1.8rem * var(--card-scale, 1));
   font-weight:900;
   color:#ffdb6e;
+}
+.card.faction-card-nilfgaard .card-value{
+  color:#ffd765;
+}
+.card.faction-card-northern .card-value{
+  color:#d8e6ff;
+}
+.card.faction-card-skellige .card-value{
+  color:#d8e6ff;
+}
+.card.faction-card-scoiatel .card-value{
+  color:#ffd765;
+}
+.card.faction-card-monsters .card-value{
+  color:#d8e6ff;
+}
+.card.faction-card-nilfgaard{
+  background:linear-gradient(180deg, rgba(50,42,34,0.95), rgba(18,12,9,0.95));
+  border-color:rgba(255,215,101,0.35);
+  color:#ffd765;
+}
+.card.faction-card-northern{
+  background:linear-gradient(180deg, rgba(13,29,60,0.95), rgba(27,58,96,0.95));
+  border-color:rgba(173,199,255,0.35);
+  color:#d8e6ff;
+}
+.card.faction-card-skellige{
+  background:linear-gradient(180deg, rgba(55,40,78,0.95), rgba(78,58,115,0.95));
+  border-color:rgba(191,176,255,0.35);
+  color:#d7c8ff;
+}
+.card.faction-card-scoiatel{
+  background:linear-gradient(180deg, rgba(25,65,28,0.95), rgba(54,106,54,0.95));
+  border-color:rgba(255,215,101,0.35);
+  color:#ffd765;
+}
+.card.faction-card-monsters{
+  background:linear-gradient(180deg, rgba(78,15,18,0.95), rgba(132,37,41,0.95));
+  border-color:rgba(239,94,92,0.35);
+  color:#ffd765;
 }
 @media (max-width:880px){
   .battlefield{

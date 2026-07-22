@@ -15,7 +15,13 @@ weatherButtons:[
 {id:"rain",icon:"🌧️",name:"Pluie"},
 {id:"tsunami",icon:"🌊",name:"Tsunami"}
 ],
-weather:{cold:false,fog:false,rain:false,tsunami:false},powerPresets:[0,1,2,3,4,5,6,7,8,10,15],playerNames:["Joueur 1","Joueur 2"],showLabelModal:false,labelModal:{player1:"Joueur 1",player2:"Joueur 2"},newCard:{player:1,row:"melee",value:1,type:"normal"},
+weather:{cold:false,fog:false,rain:false,tsunami:false},powerPresets:[0,1,2,3,4,5,6,7,8,9,10,15],playerNames:["Joueur 1","Joueur 2"],showLabelModal:false,labelModal:{player1:"Joueur 1",player2:"Joueur 2"},coinResult:null,isFlipping:false,factions:[
+  {id:"nilfgaard",name:"Nilfgaard"},
+  {id:"northern",name:"Royaumes du Nord"},
+  {id:"skellige",name:"Skellige"},
+  {id:"scoiatel",name:"Scoia'tel"},
+  {id:"monsters",name:"Monstres"}
+],factionSelections:[0,1],newCard:{player:1,row:"melee",value:1,type:"normal"},
 players:[],
 rowElements:{},
 rowWidths:{}
@@ -34,7 +40,10 @@ siege:{cards:[],horn:false}
 mounted(){
   window.addEventListener('resize', this.updateRowWidths);
   window.addEventListener('keydown', this.handleKeydown);
-  this.$nextTick(this.updateRowWidths);
+  this.$nextTick(()=>{
+    this.updateRowWidths();
+    this.openLabelModal();
+  });
 },
 unmounted(){
   window.removeEventListener('resize', this.updateRowWidths);
@@ -51,6 +60,64 @@ return {hero:"⭐",morale:"💪",bond:"🤝",jaskier:"🎭"}[c.type]||"";
 },
 toggleWeather(id){this.weather[id]=!this.weather[id]; this.$nextTick(()=>setTimeout(this.updateRowWidths, 50))},
 clearWeather(){Object.keys(this.weather).forEach(k=>this.weather[k]=false); this.$nextTick(()=>setTimeout(this.updateRowWidths, 50))},
+flipPlayerToken(){
+  if(this.isFlipping) return;
+  this.isFlipping = true;
+  this.coinResult = null;
+  setTimeout(()=>{
+    this.coinResult = Math.random() < 0.5 ? 1 : 2;
+    this.isFlipping = false;
+  }, 520);
+},
+cycleFaction(slot){
+  const next = (this.factionSelections[slot] + 1) % this.factions.length;
+  this.factionSelections.splice(slot, 1, next);
+},
+factionClass(playerId){
+  const slot = playerId - 1;
+  const selectedIndex = this.factionSelections[slot] || 0;
+  return `faction-board-${this.factions[selectedIndex].id}`;
+},
+factionCardClass(playerId){
+  const slot = playerId - 1;
+  const selectedIndex = this.factionSelections[slot] || 0;
+  return `faction-card-${this.factions[selectedIndex].id}`;
+},
+factionScoreClass(playerId){
+  const slot = playerId - 1;
+  const selectedIndex = this.factionSelections[slot] || 0;
+  return `score-secondary-${this.factions[selectedIndex].id}`;
+},
+isMonsterFaction(playerId){
+  const slot = playerId - 1;
+  const selectedIndex = this.factionSelections[slot] || 0;
+  return this.factions[selectedIndex]?.id === 'monsters';
+},
+monsterUnitCandidates(playerId){
+  const player = this.players[playerId - 1];
+  if(!player) return [];
+  return ['melee','range','siege'].flatMap(row =>
+    player[row].cards
+      .map((card, index) => ({row, card, index}))
+      .filter(item => item.card.type !== 'hero')
+  );
+},
+hasMonsterUnitCandidates(playerId){
+  return this.monsterUnitCandidates(playerId).length > 0;
+},
+resetToRandomMonsterCard(playerId){
+  if(!this.isMonsterFaction(playerId)) return;
+  const candidates = this.monsterUnitCandidates(playerId);
+  if(candidates.length === 0) return;
+  const choice = candidates[Math.floor(Math.random() * candidates.length)];
+  const savedCard = {...choice.card};
+  const savedRow = choice.row;
+
+  this.resetGame();
+  const player = this.players[playerId - 1];
+  player[savedRow].cards.push(savedCard);
+  this.$nextTick(this.updateRowWidths);
+},
 resetGame(){
   this.clearWeather();
   this.players.forEach(p=>{
@@ -91,7 +158,6 @@ handleKeydown(event){
 addCard(){
 const p=this.players[this.newCard.player-1];
 p[this.newCard.row].cards.push({value:this.newCard.value,type:this.newCard.type});
-this.newCard.value=this.newCard.type==="jaskier"?2:1;
 this.$nextTick(this.updateRowWidths);
 },
 removeCard(p,row,i){p[row].cards.splice(i,1); this.$nextTick(this.updateRowWidths);},
