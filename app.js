@@ -21,7 +21,7 @@ weather:{cold:false,fog:false,rain:false,tsunami:false},powerPresets:[0,1,2,3,4,
   {id:"skellige",name:"Skellige"},
   {id:"scoiatel",name:"Scoia'tel"},
   {id:"monsters",name:"Monstres"}
-],factionSelections:[0,1],newCard:{player:1,row:"melee",value:1,type:"normal"},
+],factionSelections:[0,1],newCard:{player:1,row:"melee",value:1,type:"normal",heroBonus:"none"},
 players:[],
 rowElements:{},
 rowWidths:{}
@@ -51,12 +51,24 @@ unmounted(){
 },
 methods:{
 
+selectNewCardType(type){
+  this.newCard.type = type;
+  if(type !== 'hero'){
+    this.newCard.heroBonus = 'none';
+  }
+},
+selectHeroBonus(bonus){
+  this.newCard.heroBonus = bonus;
+},
 rowsForPlayer(){
     return [...this.rows]; // Mêlée, Distance, Siège
 },
 
-icon(c){
-return {hero:"⭐",morale:"💪",bond:"🤝",jaskier:"🎭",vache:"🐄"}[c.type]||"";
+cardIcons(c){
+  if(c.type === 'hero'){
+    return c.heroBonus === 'morale' ? ['⭐','💪'] : ['⭐'];
+  }
+  return [{hero:'⭐',morale:'💪',bond:'🤝',jaskier:'🎭',vache:'🐄'}[c.type] || ''];
 },
 toggleWeather(id){this.weather[id]=!this.weather[id]; this.$nextTick(()=>setTimeout(this.updateRowWidths, 50))},
 clearWeather(){Object.keys(this.weather).forEach(k=>this.weather[k]=false); this.$nextTick(()=>setTimeout(this.updateRowWidths, 50))},
@@ -166,7 +178,7 @@ resetGame(){
     this.players[playerId - 1].melee.cards.push(card);
   });
 
-  this.newCard = {player:1,row:'melee',value:1,type:'normal'};
+  this.newCard = {player:1,row:'melee',value:1,type:'normal',heroBonus:'none'};
   this.$nextTick(this.updateRowWidths);
 },
 openLabelModal(){
@@ -196,7 +208,10 @@ handleKeydown(event){
 addCard(){
 const p=this.players[this.newCard.player-1];
 const cardValue = this.newCard.type === 'vache' ? 0 : this.newCard.value;
-p[this.newCard.row].cards.push({value:cardValue,type:this.newCard.type});
+const card = this.newCard.type === 'hero'
+  ? {value:cardValue, type:this.newCard.type, heroBonus:this.newCard.heroBonus || 'none'}
+  : {value:cardValue, type:this.newCard.type};
+p[this.newCard.row].cards.push(card);
 this.$nextTick(this.updateRowWidths);
 },
 removeCard(p,row,i){p[row].cards.splice(i,1); this.$nextTick(this.updateRowWidths);},
@@ -306,9 +321,15 @@ if(card.type==="bond"){
 }
 
 // 3 moral
-const moraleCards=p[row].cards.filter(c=>c.type==="morale").length;
+const isMoraleCard = card.type === "morale" || (card.type === "hero" && card.heroBonus === "morale");
+const moraleCards=p[row].cards.filter(c=>c.type==="morale" || (c.type==="hero" && c.heroBonus==="morale")).length;
 if(card.type!=="hero" && moraleCards>0){
-    v+=moraleCards-(card.type==="morale"?1:0);
+    v+=moraleCards-(isMoraleCard?1:0);
+}
+
+// 4 bonus moral sur un héro spécialisé
+if(card.type === "hero" && card.heroBonus === "morale" && moraleCards > 0){
+    v += moraleCards - 1;
 }
 
 // 4 cor / Jaskier line doubling

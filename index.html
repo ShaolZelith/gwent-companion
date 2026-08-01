@@ -86,12 +86,17 @@
       </div>
 
       <div class="button-grid types">
-        <button :class="{selected:newCard.type==='normal'}" @click="newCard.type='normal'">👤</button>
-        <button :class="{selected:newCard.type==='hero'}" @click="newCard.type='hero'">⭐</button>
-        <button :class="{selected:newCard.type==='morale'}" @click="newCard.type='morale'">💪</button>
-        <button :class="{selected:newCard.type==='bond'}" @click="newCard.type='bond'">🤝</button>
-        <button :class="{selected:newCard.type==='jaskier'}" @click="newCard.type='jaskier'">🎭</button>
-        <button :class="{selected:newCard.type==='vache'}" @click="newCard.type='vache'; newCard.value = 0">🐄</button>
+        <button :class="{selected:newCard.type==='normal'}" @click="selectNewCardType('normal')">👤</button>
+        <button :class="{selected:newCard.type==='hero'}" @click="selectNewCardType('hero')">⭐</button>
+        <button :class="{selected:newCard.type==='morale'}" @click="selectNewCardType('morale')">💪</button>
+        <button :class="{selected:newCard.type==='bond'}" @click="selectNewCardType('bond')">🤝</button>
+        <button :class="{selected:newCard.type==='jaskier'}" @click="selectNewCardType('jaskier')">🎭</button>
+        <button :class="{selected:newCard.type==='vache'}" @click="selectNewCardType('vache'); newCard.value = 0">🐄</button>
+      </div>
+
+      <div v-if="newCard.type==='hero'" class="button-grid hero-bonus-grid">
+        <button :class="{selected:newCard.heroBonus==='none'}" @click="selectHeroBonus('none')">👤</button>
+        <button :class="{selected:newCard.heroBonus==='morale'}" @click="selectHeroBonus('morale')">💪</button>
       </div>
 
       <div class="power-label">Puissance</div>
@@ -151,7 +156,9 @@
                   :key="item.index"
                   :style="cardPosition(i, displayedCards(p, r.id).length, p, r.id)"
                   @click="removeCard(p, r.id, item.index)">
-                  <div class="card-icon">{{icon(item.card)}}</div>
+                  <div class="card-icon">
+                    <span v-for="(iconSymbol, idx) in cardIcons(item.card)" :key="`${item.index}-${idx}`" class="card-icon-symbol">{{iconSymbol}}</span>
+                  </div>
                   <div class="card-value">{{effective(item.card, p, r.id)}}</div>
                 </div>
               </div>
