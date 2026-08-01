@@ -385,6 +385,26 @@ button{
   display:flex;
   justify-content:center;
 }
+.controls-center{
+  flex-direction:column;
+  gap:10px;
+}
+.highlight-max-btn{
+  min-width:54px;
+  min-height:42px;
+  padding:0 12px;
+  border-radius:14px;
+  background:rgba(255,255,255,0.06);
+  color:#f3ecd4;
+  font-size:1.15rem;
+  font-weight:900;
+  border:1px solid rgba(255,255,255,0.12);
+}
+.highlight-max-btn.active{
+  background:rgba(255, 211, 88, 0.18);
+  border:1px solid rgba(255, 211, 88, 0.44);
+  color:#ffd765;
+}
 .weather-btn{
   width:72px;
   height:72px;
@@ -820,6 +840,12 @@ button{
 .card:hover{
   transform:translateY(-4px);
   box-shadow:0 20px 38px rgba(0,0,0,0.34);
+}
+.card.max-value-card{
+  box-shadow:0 20px 38px rgba(0,0,0,0.34);
+  border:3px solid #ff2f2f !important;
+  border-color:#ff2f2f !important;
+  outline:1px solid rgba(255,255,255,0.12);
 }
 .card.weather-cold-card::before{
   opacity:1;

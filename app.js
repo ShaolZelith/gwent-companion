@@ -24,7 +24,10 @@ weather:{cold:false,fog:false,rain:false,tsunami:false},powerPresets:[0,1,2,3,4,
 ],factionSelections:[0,1],newCard:{player:1,row:"melee",value:1,type:"normal",heroBonus:"none"},
 players:[],
 rowElements:{},
-rowWidths:{}
+rowWidths:{},
+maxValueActive:false,
+maxValueCardKeys:[],
+maxValueTimer:null
 }
 },
 created(){
@@ -48,6 +51,7 @@ mounted(){
 unmounted(){
   window.removeEventListener('resize', this.updateRowWidths);
   window.removeEventListener('keydown', this.handleKeydown);
+  clearTimeout(this.maxValueTimer);
 },
 methods:{
 
@@ -155,6 +159,7 @@ resetToRandomMonsterCard(playerId){
 },
 resetGame(){
   this.clearWeather();
+  this.clearMaxValueHighlight();
   const transformedVacheCards = [];
 
   this.players.forEach(p=>{
@@ -215,6 +220,72 @@ p[this.newCard.row].cards.push(card);
 this.$nextTick(this.updateRowWidths);
 },
 removeCard(p,row,i){p[row].cards.splice(i,1); this.$nextTick(this.updateRowWidths);},
+clearMaxValueHighlight(){
+  clearTimeout(this.maxValueTimer);
+  this.maxValueActive = false;
+  this.maxValueCardKeys = [];
+},
+highlightMaxValueCards(){
+  if(this.maxValueActive){
+    this.removeHighlightedMaxCards();
+    return;
+  }
+
+  let maxValue = -Infinity;
+  const keys = [];
+
+  this.players.forEach(player => {
+    ['melee','range','siege'].forEach(row => {
+      player[row].cards.forEach((card, index) => {
+        if(card.type === 'hero') return;
+        const currentValue = this.effective(card, player, row);
+        if(currentValue > maxValue){
+          maxValue = currentValue;
+          keys.length = 0;
+          keys.push(`${player.id}-${row}-${index}`);
+        } else if(currentValue === maxValue){
+          keys.push(`${player.id}-${row}-${index}`);
+        }
+      });
+    });
+  });
+
+  if(keys.length === 0){
+    return;
+  }
+
+  this.maxValueCardKeys = keys;
+  this.maxValueActive = true;
+  clearTimeout(this.maxValueTimer);
+  this.maxValueTimer = setTimeout(() => {
+    this.clearMaxValueHighlight();
+  }, 5000);
+},
+removeHighlightedMaxCards(){
+  if(!this.maxValueActive || this.maxValueCardKeys.length === 0){
+    return;
+  }
+
+  const removals = this.maxValueCardKeys
+    .map(key => {
+      const [playerId, row, index] = key.split('-');
+      return {playerId:Number(playerId), row, index:Number(index)};
+    })
+    .sort((a, b) => b.index - a.index);
+
+  removals.forEach(({playerId, row, index}) => {
+    const player = this.players[playerId - 1];
+    if(player && player[row] && player[row].cards[index]){
+      player[row].cards.splice(index, 1);
+    }
+  });
+
+  this.clearMaxValueHighlight();
+  this.$nextTick(this.updateRowWidths);
+},
+isMaxValueCard(player, row, index){
+  return this.maxValueActive && this.maxValueCardKeys.includes(`${player.id}-${row}-${index}`);
+},
 weatherOnRow(row){
 return (row==="melee"&&this.weather.cold)||
 (row==="range"&&(this.weather.fog||this.weather.tsunami))||
