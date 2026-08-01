@@ -56,7 +56,7 @@ rowsForPlayer(){
 },
 
 icon(c){
-return {hero:"⭐",morale:"💪",bond:"🤝",jaskier:"🎭"}[c.type]||"";
+return {hero:"⭐",morale:"💪",bond:"🤝",jaskier:"🎭",vache:"🐄"}[c.type]||"";
 },
 toggleWeather(id){this.weather[id]=!this.weather[id]; this.$nextTick(()=>setTimeout(this.updateRowWidths, 50))},
 clearWeather(){Object.keys(this.weather).forEach(k=>this.weather[k]=false); this.$nextTick(()=>setTimeout(this.updateRowWidths, 50))},
@@ -99,7 +99,7 @@ monsterUnitCandidates(playerId){
   return ['melee','range','siege'].flatMap(row =>
     player[row].cards
       .map((card, index) => ({row, card, index}))
-      .filter(item => item.card.type !== 'hero')
+      .filter(item => item.card.type !== 'hero' && item.card.type !== 'vache')
   );
 },
 hasMonsterUnitCandidates(playerId){
@@ -143,7 +143,17 @@ resetToRandomMonsterCard(playerId){
 },
 resetGame(){
   this.clearWeather();
+  const transformedVacheCards = [];
+
   this.players.forEach(p=>{
+    ['melee','range','siege'].forEach(row => {
+      p[row].cards.forEach(card => {
+        if(card.type === 'vache'){
+          transformedVacheCards.push({playerId: p.id, card: {value: 8, type: 'normal'}});
+        }
+      });
+    });
+
     p.melee.cards=[];
     p.melee.horn=false;
     p.range.cards=[];
@@ -151,6 +161,11 @@ resetGame(){
     p.siege.cards=[];
     p.siege.horn=false;
   });
+
+  transformedVacheCards.forEach(({playerId, card}) => {
+    this.players[playerId - 1].melee.cards.push(card);
+  });
+
   this.newCard = {player:1,row:'melee',value:1,type:'normal'};
   this.$nextTick(this.updateRowWidths);
 },
@@ -180,7 +195,8 @@ handleKeydown(event){
 },
 addCard(){
 const p=this.players[this.newCard.player-1];
-p[this.newCard.row].cards.push({value:this.newCard.value,type:this.newCard.type});
+const cardValue = this.newCard.type === 'vache' ? 0 : this.newCard.value;
+p[this.newCard.row].cards.push({value:cardValue,type:this.newCard.type});
 this.$nextTick(this.updateRowWidths);
 },
 removeCard(p,row,i){p[row].cards.splice(i,1); this.$nextTick(this.updateRowWidths);},

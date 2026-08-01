@@ -443,23 +443,28 @@ button{
   grid-template-columns:repeat(3,1fr);
 }
 .button-grid.types{
-  grid-template-columns:repeat(5,1fr);
+  grid-template-columns:repeat(6, minmax(0, 1fr));
 }
 .button-grid.presets{
   grid-template-columns:repeat(auto-fit,minmax(0,1fr));
 }
 .button-grid button{
-  min-height:54px;
-  border-radius:18px;
+  min-height:50px;
+  border-radius:16px;
   background:rgba(255,255,255,0.06);
   color:#f3ecd4;
   font-weight:700;
-  font-size:0.95rem;
+  font-size:0.88rem;
   transition:all .25s ease;
 }
 .button-grid.presets button{
-  min-height:48px;
-  font-size:0.88rem;
+  min-height:46px;
+  font-size:0.82rem;
+}
+.button-grid.types button{
+  min-height:46px;
+  padding:0 6px;
+  font-size:0.78rem;
 }
 .button-grid button.selected,
 .button-grid button:hover{
