@@ -219,6 +219,16 @@ const card = this.newCard.type === 'hero'
   ? {value:cardValue, type:this.newCard.type, heroBonus:this.newCard.heroBonus || 'none'}
   : {value:cardValue, type:this.newCard.type};
 p[this.newCard.row].cards.push(card);
+
+const preservedValue = this.newCard.value;
+this.newCard = {
+  player: this.newCard.player,
+  row: this.newCard.row,
+  value: preservedValue,
+  type: 'normal',
+  heroBonus: 'none'
+};
+
 this.$nextTick(this.updateRowWidths);
 },
 removeCard(p,row,i){p[row].cards.splice(i,1); this.$nextTick(this.updateRowWidths);},
