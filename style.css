@@ -893,27 +893,27 @@ button{
 }
 .card.faction-card-nilfgaard{
   background:linear-gradient(180deg, rgba(50,42,34,0.95), rgba(18,12,9,0.95));
-  border-color:rgba(255,215,101,0.35);
+  border-color:#f5c95f;
   color:#ffd765;
 }
 .card.faction-card-northern{
   background:linear-gradient(180deg, rgba(13,29,60,0.95), rgba(27,58,96,0.95));
-  border-color:rgba(173,199,255,0.35);
+  border-color:rgba(255,255,255,0.95);
   color:#d8e6ff;
 }
 .card.faction-card-skellige{
   background:linear-gradient(180deg, rgba(55,40,78,0.95), rgba(78,58,115,0.95));
-  border-color:rgba(191,176,255,0.35);
+  border-color:rgba(255,255,255,0.95);
   color:#d7c8ff;
 }
 .card.faction-card-scoiatel{
   background:linear-gradient(180deg, rgba(25,65,28,0.95), rgba(54,106,54,0.95));
-  border-color:rgba(255,215,101,0.35);
+  border-color:#f5c95f;
   color:#ffd765;
 }
 .card.faction-card-monsters{
   background:linear-gradient(180deg, rgba(78,15,18,0.95), rgba(132,37,41,0.95));
-  border-color:rgba(239,94,92,0.35);
+  border-color:rgba(255,255,255,0.95);
   color:#ffd765;
 }
 @media (max-width:880px){
