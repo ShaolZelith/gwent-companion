@@ -321,15 +321,10 @@ if(card.type==="bond"){
 }
 
 // 3 moral
-const isMoraleCard = card.type === "morale" || (card.type === "hero" && card.heroBonus === "morale");
-const moraleCards=p[row].cards.filter(c=>c.type==="morale" || (c.type==="hero" && c.heroBonus==="morale")).length;
+const isMoraleCard = card.type === "morale";
+const moraleCards=p[row].cards.filter(c=>c.type === "morale" || (c.type === "hero" && c.heroBonus === "morale")).length;
 if(card.type!=="hero" && moraleCards>0){
     v+=moraleCards-(isMoraleCard?1:0);
-}
-
-// 4 bonus moral sur un héro spécialisé
-if(card.type === "hero" && card.heroBonus === "morale" && moraleCards > 0){
-    v += moraleCards - 1;
 }
 
 // 4 cor / Jaskier line doubling
