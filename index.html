@@ -23,9 +23,8 @@
     </div>
 
     <section class="coin-panel glass-panel">
-      <div class="panel-title">Tirage du joueur</div>
       <div class="coin-area">
-        <button class="coin-token" :class="{flip:isFlipping}" @click="flipPlayerToken" :disabled="isFlipping">
+        <button class="coin-token" :class="[{flip:isFlipping}, coinButtonFactionClass()]" @click="flipPlayerToken" :disabled="isFlipping">
           <span>
             {{ isFlipping ? '...' : (coinResult ? playerNames[coinResult-1] : 'Tirer') }}
           </span>
@@ -35,7 +34,6 @@
     </section>
 
     <section class="faction-panel glass-panel">
-      <div class="panel-title">Faction</div>
       <div class="faction-buttons">
         <button
           v-for="(selectedIndex, slot) in factionSelections"
@@ -45,28 +43,6 @@
           @click="cycleFaction(slot)">
           <span class="faction-token-name">{{ factions[selectedIndex].name }}</span>
           <span class="faction-token-slot">{{ playerNames[slot] }}</span>
-        </button>
-      </div>
-    </section>
-
-    <section class="weather-panel glass-panel">
-      <div class="panel-title">
-        <span>Effets météo</span>
-      </div>
-      <div class="weather-buttons">
-        <button
-          v-for="w in weatherButtons"
-          :key="w.id"
-          :title="w.name"
-          :class="['weather-btn', {active: weather[w.id]}]"
-          @click="toggleWeather(w.id)">
-          {{w.icon}}
-        </button>
-        <button
-          class="weather-btn weather-clear"
-          title="Beau temps"
-          @click="clearWeather">
-          ☀️
         </button>
       </div>
     </section>
@@ -178,6 +154,36 @@
       </div>
     </section>
 
+    <section class="weather-panel glass-panel">
+      <div class="weather-line">
+        <div class="weather-left">
+          <div class="weather-buttons">
+            <button
+              v-for="w in weatherButtons"
+              :key="w.id"
+              :title="w.name"
+              :class="['weather-btn', {active: weather[w.id]}]"
+              @click="toggleWeather(w.id)">
+              {{w.icon}}
+            </button>
+            <button
+              class="weather-btn weather-clear"
+              title="Beau temps"
+              @click="clearWeather">
+              ☀️
+            </button>
+          </div>
+        </div>
+
+        <button
+          class="highlight-max-btn"
+          :class="{active:maxValueActive}"
+          @click="highlightMaxValueCards">
+          ☠️
+        </button>
+      </div>
+    </section>
+
     <div class="controls-row">
       <div class="controls-left">
         <button
@@ -190,13 +196,7 @@
       </div>
 
       <div class="controls-center">
-        <button
-          class="highlight-max-btn"
-          :class="{active:maxValueActive}"
-          @click="highlightMaxValueCards">
-          ☠️
-        </button>
-        <button class="reset-btn" @click="resetGame">Reset</button>
+        <button class="reset-btn" @click="resetGame">nouvelle manche</button>
       </div>
 
       <div class="controls-right">

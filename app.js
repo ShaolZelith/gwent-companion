@@ -96,6 +96,13 @@ factionClass(playerId){
   const selectedIndex = this.factionSelections[slot] || 0;
   return `faction-board-${this.factions[selectedIndex].id}`;
 },
+coinButtonFactionClass(){
+  if(!this.coinResult){
+    return '';
+  }
+  const selectedIndex = this.factionSelections[this.coinResult - 1] || 0;
+  return `faction-coin-${this.factions[selectedIndex].id}`;
+},
 factionCardClass(playerId){
   const slot = playerId - 1;
   const selectedIndex = this.factionSelections[slot] || 0;

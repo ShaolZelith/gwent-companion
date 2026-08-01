@@ -125,6 +125,31 @@ button{
 .coin-token.flip{
   animation:coinSpin 0.52s ease-in-out;
 }
+.coin-token.faction-coin-nilfgaard{
+  background:linear-gradient(135deg, rgba(25, 21, 10, 0.95), rgba(74, 52, 13, 0.95));
+  color:#ffd765;
+  border-color:rgba(255,215,101,0.45);
+}
+.coin-token.faction-coin-northern{
+  background:linear-gradient(135deg, rgba(16, 40, 73, 0.95), rgba(40, 77, 119, 0.95));
+  color:#d8e6ff;
+  border-color:rgba(173,199,255,0.45);
+}
+.coin-token.faction-coin-skellige{
+  background:linear-gradient(135deg, rgba(59, 39, 90, 0.95), rgba(113, 79, 160, 0.95));
+  color:#d7c8ff;
+  border-color:rgba(191,176,255,0.45);
+}
+.coin-token.faction-coin-scoiatel{
+  background:linear-gradient(135deg, rgba(25, 64, 28, 0.95), rgba(57, 110, 56, 0.95));
+  color:#ffd765;
+  border-color:rgba(255,215,101,0.45);
+}
+.coin-token.faction-coin-monsters{
+  background:linear-gradient(135deg, rgba(74, 13, 17, 0.95), rgba(135, 33, 43, 0.95));
+  color:#d8e6ff;
+  border-color:rgba(173,199,255,0.45);
+}
 .coin-hint{
   color:rgba(243,236,212,0.72);
   font-size:0.95rem;
@@ -140,9 +165,9 @@ button{
   margin-top:14px;
 }
 .faction-token{
-  width:108px;
-  min-width:108px;
-  height:108px;
+  width:132px;
+  min-width:132px;
+  height:132px;
   border-radius:50%;
   border:1px solid rgba(255,255,255,0.14);
   display:flex;
@@ -317,6 +342,22 @@ button{
   transform:scale(1.05);
   background:rgba(255,255,255,0.12);
 }
+.weather-line{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+}
+.weather-left{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:20px;
+  flex:1;
+  min-width:0;
+  flex-wrap:wrap;
+}
 .weather-buttons{
   display:flex;
   flex-wrap:wrap;
@@ -386,19 +427,19 @@ button{
   justify-content:center;
 }
 .controls-center{
-  flex-direction:column;
-  gap:10px;
+  align-items:center;
 }
 .highlight-max-btn{
-  min-width:54px;
-  min-height:42px;
-  padding:0 12px;
-  border-radius:14px;
+  min-width:70px;
+  min-height:56px;
+  padding:0 16px;
+  border-radius:18px;
   background:rgba(255,255,255,0.06);
   color:#f3ecd4;
-  font-size:1.15rem;
+  font-size:1.55rem;
   font-weight:900;
   border:1px solid rgba(255,255,255,0.12);
+  margin-left:auto;
 }
 .highlight-max-btn.active{
   background:rgba(255, 211, 88, 0.18);
