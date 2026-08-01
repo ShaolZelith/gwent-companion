@@ -847,6 +847,53 @@ button{
   border-color:#ff2f2f !important;
   outline:1px solid rgba(255,255,255,0.12);
 }
+.card.burning-card{
+  animation:burnCardAnimation .82s ease-in-out infinite alternate;
+}
+.card.burning-card::before{
+  content:'';
+  position:absolute;
+  left:-10%;
+  right:-10%;
+  bottom:-12%;
+  height:58%;
+  pointer-events:none;
+  opacity:0.85;
+  background:
+    radial-gradient(circle at 30% 100%, rgba(255, 241, 194, 0.32), transparent 24%),
+    radial-gradient(circle at 50% 100%, rgba(255, 160, 86, 0.30), transparent 26%),
+    radial-gradient(circle at 72% 100%, rgba(255, 68, 24, 0.26), transparent 24%);
+  filter:blur(3px);
+  animation:burnSmoke .82s ease-in-out infinite alternate;
+}
+.card.burning-card::after{
+  content:'';
+  position:absolute;
+  inset:-12%;
+  pointer-events:none;
+  opacity:0.98;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(255, 246, 166, 0.98), transparent 12%),
+    radial-gradient(circle at 50% 14%, rgba(255, 153, 66, 0.95), transparent 20%),
+    radial-gradient(circle at 78% 18%, rgba(255, 92, 35, 0.90), transparent 18%),
+    radial-gradient(circle at 40% 68%, rgba(255, 40, 0, 0.90), transparent 34%),
+    radial-gradient(circle at 62% 38%, rgba(255, 88, 20, 0.55), transparent 24%);
+  mix-blend-mode:screen;
+  filter:blur(0.5px);
+  animation:burnSpark .82s ease-in-out infinite alternate;
+}
+@keyframes burnCardAnimation{
+  0%{filter:brightness(1) saturate(1.05) sepia(0.10); transform:scale(1) translateY(0);}
+  100%{filter:brightness(1.18) saturate(1.55) contrast(1.15); transform:scale(1.03) translateY(-1px);}
+}
+@keyframes burnSpark{
+  from{transform:scale(0.92) rotate(-1deg); opacity:0.55;}
+  to{transform:scale(1.08) rotate(2deg); opacity:1;}
+}
+@keyframes burnSmoke{
+  from{transform:translateY(6px) scale(0.82); opacity:0.58;}
+  to{transform:translateY(0) scale(1.03); opacity:1;}
+}
 .card.weather-cold-card::before{
   opacity:1;
   background:linear-gradient(135deg, rgba(160,228,255,0.38), rgba(98,170,255,0.22));

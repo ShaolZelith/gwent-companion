@@ -151,7 +151,11 @@
               <div class="cards" :ref="el => setCardRowRef(el, p.id, r.id)">
                 <div
                   class="card"
-                  :class="[factionCardClass(p.id), weatherCardClass(r.id), { 'max-value-card': isMaxValueCard(p, r.id, item.index) }]"
+                  :class="[
+                    factionCardClass(p.id),
+                    weatherCardClass(r.id),
+                    { 'max-value-card': isMaxValueCard(p, r.id, item.index), 'burning-card': isBurningCard(p, r.id, item.index) }
+                  ]"
                   v-for="(item, i) in displayedCards(p, r.id)"
                   :key="item.index"
                   :style="cardPosition(i, displayedCards(p, r.id).length, p, r.id)"

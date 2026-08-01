@@ -27,7 +27,9 @@ rowElements:{},
 rowWidths:{},
 maxValueActive:false,
 maxValueCardKeys:[],
-maxValueTimer:null
+burningCardKeys:[],
+maxValueTimer:null,
+burnAnimationTimer:null
 }
 },
 created(){
@@ -222,8 +224,10 @@ this.$nextTick(this.updateRowWidths);
 removeCard(p,row,i){p[row].cards.splice(i,1); this.$nextTick(this.updateRowWidths);},
 clearMaxValueHighlight(){
   clearTimeout(this.maxValueTimer);
+  clearTimeout(this.burnAnimationTimer);
   this.maxValueActive = false;
   this.maxValueCardKeys = [];
+  this.burningCardKeys = [];
 },
 highlightMaxValueCards(){
   if(this.maxValueActive){
@@ -266,25 +270,34 @@ removeHighlightedMaxCards(){
     return;
   }
 
-  const removals = this.maxValueCardKeys
-    .map(key => {
-      const [playerId, row, index] = key.split('-');
-      return {playerId:Number(playerId), row, index:Number(index)};
-    })
-    .sort((a, b) => b.index - a.index);
+  this.burningCardKeys = [...this.maxValueCardKeys];
+  clearTimeout(this.burnAnimationTimer);
+  clearTimeout(this.maxValueTimer);
 
-  removals.forEach(({playerId, row, index}) => {
-    const player = this.players[playerId - 1];
-    if(player && player[row] && player[row].cards[index]){
-      player[row].cards.splice(index, 1);
-    }
-  });
+  this.burnAnimationTimer = setTimeout(() => {
+    const removals = this.burningCardKeys
+      .map(key => {
+        const [playerId, row, index] = key.split('-');
+        return {playerId:Number(playerId), row, index:Number(index)};
+      })
+      .sort((a, b) => b.index - a.index);
 
-  this.clearMaxValueHighlight();
-  this.$nextTick(this.updateRowWidths);
+    removals.forEach(({playerId, row, index}) => {
+      const player = this.players[playerId - 1];
+      if(player && player[row] && player[row].cards[index]){
+        player[row].cards.splice(index, 1);
+      }
+    });
+
+    this.clearMaxValueHighlight();
+    this.$nextTick(this.updateRowWidths);
+  }, 820);
 },
 isMaxValueCard(player, row, index){
   return this.maxValueActive && this.maxValueCardKeys.includes(`${player.id}-${row}-${index}`);
+},
+isBurningCard(player, row, index){
+  return this.burningCardKeys.includes(`${player.id}-${row}-${index}`);
 },
 weatherOnRow(row){
 return (row==="melee"&&this.weather.cold)||
