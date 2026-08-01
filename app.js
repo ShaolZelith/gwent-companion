@@ -232,6 +232,9 @@ weatherRowClass(row){
   }
   return '';
 },
+weatherCardClass(row){
+  return this.weatherRowClass(row) ? `${this.weatherRowClass(row)}-card` : '';
+},
 hasJaskier(p,row){
 return p[row].cards.some(c=>c.type==="jaskier");
 },

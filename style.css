@@ -802,10 +802,32 @@ button{
   color:#f7e4a6;
   text-shadow:0 0 8px rgba(0,0,0,0.24);
   transition:transform .2s ease, box-shadow .2s ease, width .2s ease, height .2s ease;
+  overflow:hidden;
+}
+.card::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .2s ease;
 }
 .card:hover{
   transform:translateY(-4px);
   box-shadow:0 20px 38px rgba(0,0,0,0.34);
+}
+.card.weather-cold-card::before{
+  opacity:1;
+  background:linear-gradient(135deg, rgba(160,228,255,0.38), rgba(98,170,255,0.22));
+}
+.card.weather-fog-card::before{
+  opacity:1;
+  background:linear-gradient(135deg, rgba(235,235,235,0.30), rgba(150,150,150,0.18));
+}
+.card.weather-rain-card::before,
+.card.weather-tsunami-card::before{
+  opacity:1;
+  background:linear-gradient(135deg, rgba(49,93,184,0.42), rgba(18,52,119,0.26));
 }
 .card-icon{
   font-size:calc(1.35rem * var(--card-scale, 1));
