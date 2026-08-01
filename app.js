@@ -210,6 +210,28 @@ return (row==="melee"&&this.weather.cold)||
 ((row==="range"&&(this.weather.fog||this.weather.tsunami))||
 (row==="siege"&&(this.weather.rain||this.weather.tsunami)));
 },
+weatherRowClass(row){
+  if(row === 'melee' && this.weather.cold){
+    return 'weather-cold';
+  }
+  if(row === 'range'){
+    if(this.weather.tsunami){
+      return 'weather-tsunami';
+    }
+    if(this.weather.fog){
+      return 'weather-fog';
+    }
+  }
+  if(row === 'siege'){
+    if(this.weather.tsunami){
+      return 'weather-tsunami';
+    }
+    if(this.weather.rain){
+      return 'weather-rain';
+    }
+  }
+  return '';
+},
 hasJaskier(p,row){
 return p[row].cards.some(c=>c.type==="jaskier");
 },

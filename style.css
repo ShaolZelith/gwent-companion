@@ -683,16 +683,39 @@ button{
   position:relative;
   border-radius:18px;
   padding:8px 10px;
-  background:linear-gradient(90deg, rgba(72,145,255,0.18) 0%, rgba(110,210,255,0.1) 50%, rgba(51,111,255,0.2) 100%);
-  border:1px solid rgba(118,198,255,0.6);
-  box-shadow:0 0 0 1px rgba(116,196,255,0.2), 0 0 24px rgba(77,161,255,0.36), inset 0 0 18px rgba(121,203,255,0.16);
 }
-.row-line.weather-active-row .line-icon .row-icon{
-  background:rgba(120,210,255,0.22);
-  box-shadow:0 0 18px rgba(97,179,255,0.28);
+.row-line.weather-cold{
+  background:linear-gradient(90deg, rgba(124,202,255,0.2) 0%, rgba(175,225,255,0.14) 50%, rgba(108,185,255,0.22) 100%);
+  border:1px solid rgba(120,201,255,0.56);
+  box-shadow:0 0 0 1px rgba(133,212,255,0.18), 0 0 22px rgba(92,175,255,0.28), inset 0 0 18px rgba(132,212,255,0.18);
 }
-.row-line.weather-active-row .score-value{
-  text-shadow:0 0 16px rgba(94,183,255,0.3);
+.row-line.weather-fog{
+  background:linear-gradient(90deg, rgba(182,182,182,0.24) 0%, rgba(220,220,220,0.12) 50%, rgba(156,156,156,0.20) 100%);
+  border:1px solid rgba(214,214,214,0.44);
+  box-shadow:0 0 0 1px rgba(208,208,208,0.14), 0 0 20px rgba(180,180,180,0.20), inset 0 0 18px rgba(232,232,232,0.12);
+}
+.row-line.weather-rain,
+.row-line.weather-tsunami{
+  background:linear-gradient(90deg, rgba(37,82,162,0.24) 0%, rgba(24,50,110,0.16) 50%, rgba(26,59,128,0.24) 100%);
+  border:1px solid rgba(92,138,220,0.50);
+  box-shadow:0 0 0 1px rgba(82,134,220,0.16), 0 0 24px rgba(38,92,194,0.24), inset 0 0 18px rgba(55,108,210,0.18);
+}
+.row-line.weather-cold .line-icon .row-icon,
+.row-line.weather-fog .line-icon .row-icon,
+.row-line.weather-rain .line-icon .row-icon,
+.row-line.weather-tsunami .line-icon .row-icon{
+  background:rgba(255,255,255,0.12);
+  box-shadow:0 0 16px rgba(255,255,255,0.16);
+}
+.row-line.weather-cold .score-value{
+  text-shadow:0 0 16px rgba(124,202,255,0.36);
+}
+.row-line.weather-fog .score-value{
+  text-shadow:0 0 16px rgba(220,220,220,0.24);
+}
+.row-line.weather-rain .score-value,
+.row-line.weather-tsunami .score-value{
+  text-shadow:0 0 16px rgba(69,112,209,0.34);
 }
 .player-right .row-line{
   grid-template-columns:60px minmax(0,1fr) 40px 40px;

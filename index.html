@@ -130,7 +130,7 @@
         </div>
 
         <div class="row-panel" v-for="r in rowsForPlayer(p)" :key="r.id">
-          <div :class="['row-line', p.id===1 ? 'player-left' : 'player-right', { 'weather-active-row': isWeatherActiveRow(r.id) }]">
+          <div :class="['row-line', p.id===1 ? 'player-left' : 'player-right', weatherRowClass(r.id), { 'weather-active-row': isWeatherActiveRow(r.id) }]">
             <div class="line-cell line-horn">
               <label class="horn-toggle">
                 <input type="checkbox" v-model="p[r.id].horn">
