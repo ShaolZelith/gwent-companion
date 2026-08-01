@@ -843,7 +843,7 @@ button{
 }
 .card-icon-symbol{
   display:inline-block;
-  font-size:calc(0.72rem * var(--card-scale, 1));
+  font-size:calc(0.82rem * var(--card-scale, 1));
 }
 .card-value{
   font-size:calc(1.8rem * var(--card-scale, 1));
