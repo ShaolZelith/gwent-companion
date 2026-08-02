@@ -523,6 +523,10 @@ button{
   font-size:0.88rem;
   transition:all .25s ease;
 }
+.button-grid.rows button,
+.button-grid.hero-bonus-grid button{
+  font-size:1rem;
+}
 .button-grid.presets button{
   min-height:46px;
   font-size:0.82rem;
@@ -530,7 +534,7 @@ button{
 .button-grid.types button{
   min-height:46px;
   padding:0 6px;
-  font-size:0.78rem;
+  font-size:1rem;
 }
 .button-grid button.selected,
 .button-grid button:hover{
