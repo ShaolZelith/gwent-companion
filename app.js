@@ -74,7 +74,7 @@ cardIcons(c){
   if(c.type === 'hero'){
     return c.heroBonus === 'morale' ? ['⭐','💪'] : ['⭐'];
   }
-  return [{hero:'⭐',morale:'💪',bond:'🤝',jaskier:'🎭',vache:'🐄'}[c.type] || ''];
+  return [{hero:'⭐',morale:'💪',bond:'🤝',jaskier:'🎭',vache:'🐄',villentretenmerth:'💥'}[c.type] || ''];
 },
 toggleWeather(id){this.weather[id]=!this.weather[id]; this.$nextTick(()=>setTimeout(this.updateRowWidths, 50))},
 clearWeather(){Object.keys(this.weather).forEach(k=>this.weather[k]=false); this.$nextTick(()=>setTimeout(this.updateRowWidths, 50))},
@@ -227,6 +227,10 @@ const card = this.newCard.type === 'hero'
   : {value:cardValue, type:this.newCard.type};
 p[this.newCard.row].cards.push(card);
 
+if(card.type === 'villentretenmerth'){
+  this.triggerVillentretenmerthEffect(this.newCard.player, this.newCard.row);
+}
+
 const preservedValue = this.newCard.value;
 this.newCard = {
   player: this.newCard.player,
@@ -245,6 +249,33 @@ clearMaxValueHighlight(){
   this.maxValueActive = false;
   this.maxValueCardKeys = [];
   this.burningCardKeys = [];
+},
+animateBurnAndRemoveCardKeys(keys){
+  if(!keys || keys.length === 0){
+    return;
+  }
+
+  this.burningCardKeys = [...keys];
+  clearTimeout(this.burnAnimationTimer);
+
+  this.burnAnimationTimer = setTimeout(() => {
+    const removals = this.burningCardKeys
+      .map(key => {
+        const [playerId, row, index] = key.split('-');
+        return {playerId:Number(playerId), row, index:Number(index)};
+      })
+      .sort((a, b) => b.index - a.index);
+
+    removals.forEach(({playerId, row, index}) => {
+      const player = this.players[playerId - 1];
+      if(player && player[row] && player[row].cards[index]){
+        player[row].cards.splice(index, 1);
+      }
+    });
+
+    this.clearMaxValueHighlight();
+    this.$nextTick(this.updateRowWidths);
+  }, 820);
 },
 highlightMaxValueCards(){
   if(this.maxValueActive){
@@ -287,34 +318,52 @@ removeHighlightedMaxCards(){
     return;
   }
 
-  this.burningCardKeys = [...this.maxValueCardKeys];
-  clearTimeout(this.burnAnimationTimer);
   clearTimeout(this.maxValueTimer);
-
-  this.burnAnimationTimer = setTimeout(() => {
-    const removals = this.burningCardKeys
-      .map(key => {
-        const [playerId, row, index] = key.split('-');
-        return {playerId:Number(playerId), row, index:Number(index)};
-      })
-      .sort((a, b) => b.index - a.index);
-
-    removals.forEach(({playerId, row, index}) => {
-      const player = this.players[playerId - 1];
-      if(player && player[row] && player[row].cards[index]){
-        player[row].cards.splice(index, 1);
-      }
-    });
-
-    this.clearMaxValueHighlight();
-    this.$nextTick(this.updateRowWidths);
-  }, 820);
+  this.animateBurnAndRemoveCardKeys(this.maxValueCardKeys);
 },
 isMaxValueCard(player, row, index){
   return this.maxValueActive && this.maxValueCardKeys.includes(`${player.id}-${row}-${index}`);
 },
 isBurningCard(player, row, index){
   return this.burningCardKeys.includes(`${player.id}-${row}-${index}`);
+},
+triggerVillentretenmerthEffect(playerId, row){
+  const sourcePlayer = this.players[playerId - 1];
+  if(!sourcePlayer || !sourcePlayer[row]){
+    return;
+  }
+
+  const enemyPlayerId = playerId === 1 ? 2 : 1;
+  const enemyPlayer = this.players[enemyPlayerId - 1];
+  const enemyCards = enemyPlayer[row].cards;
+  if(enemyCards.length === 0){
+    return;
+  }
+
+  const enemyRowTotal = this.rowTotal(enemyPlayer, row);
+  if(enemyRowTotal < 10){
+    return;
+  }
+
+  const candidateValues = enemyCards
+    .filter(card => card.type !== 'hero')
+    .map(card => this.effective(card, enemyPlayer, row));
+
+  if(candidateValues.length === 0){
+    return;
+  }
+
+  const maxEffective = Math.max(...candidateValues);
+  const targets = enemyCards
+    .map((card, index) => ({card, index}))
+    .filter(({card}) => card.type !== 'hero' && this.effective(card, enemyPlayer, row) === maxEffective)
+    .map(({index}) => `${enemyPlayerId}-${row}-${index}`);
+
+  if(targets.length === 0){
+    return;
+  }
+
+  this.animateBurnAndRemoveCardKeys(targets);
 },
 weatherOnRow(row){
 return (row==="melee"&&this.weather.cold)||

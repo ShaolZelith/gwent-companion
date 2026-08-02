@@ -68,6 +68,7 @@
         <button :class="{selected:newCard.type==='bond'}" @click="selectNewCardType('bond')">🤝</button>
         <button :class="{selected:newCard.type==='jaskier'}" @click="selectNewCardType('jaskier')">🎭</button>
         <button :class="{selected:newCard.type==='vache'}" @click="selectNewCardType('vache'); newCard.value = 0">🐄</button>
+        <button :class="{selected:newCard.type==='villentretenmerth'}" @click="selectNewCardType('villentretenmerth')">💥</button>
       </div>
 
       <div v-if="newCard.type==='hero'" class="button-grid hero-bonus-grid">
