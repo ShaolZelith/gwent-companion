@@ -29,7 +29,9 @@ maxValueActive:false,
 maxValueCardKeys:[],
 burningCardKeys:[],
 maxValueTimer:null,
-burnAnimationTimer:null
+burnAnimationTimer:null,
+music:null,
+musicStarted:false
 }
 },
 created(){
@@ -43,12 +45,64 @@ siege:{cards:[],horn:false}
 }
 },
 mounted(){
+
   window.addEventListener('resize', this.updateRowWidths);
   window.addEventListener('keydown', this.handleKeydown);
+
   this.$nextTick(()=>{
     this.updateRowWidths();
     this.openLabelModal();
   });
+
+  // ==========================
+  // Musique
+  // ==========================
+
+  this.music = document.getElementById("bgMusic");
+  console.log(this.music);
+  console.log(this.music.currentSrc);
+
+  this.music.addEventListener("error", () => {
+      console.error("Erreur de chargement du MP3");
+  });
+
+  this.music.addEventListener("canplay", () => {
+      console.log("MP3 chargé");
+  });
+
+  const loopStart = 1;
+  const loopEnd = 289;
+
+  this.music.volume = 0.35;
+
+  const loop = () => {
+
+    if (!this.music.paused) {
+
+      if (this.music.currentTime >= loopEnd) {
+        this.music.currentTime = loopStart;
+      }
+
+      requestAnimationFrame(loop);
+    }
+
+  };
+
+  this.music.addEventListener("play", () => {
+    requestAnimationFrame(loop);
+  });
+
+  window.addEventListener("pointerdown", () => {
+
+    if (this.musicStarted) return;
+
+    this.musicStarted = true;
+    this.music.currentTime = loopStart;
+
+    this.music.play().catch(() => {});
+
+  }, { once:true });
+
 },
 unmounted(){
   window.removeEventListener('resize', this.updateRowWidths);
@@ -56,6 +110,22 @@ unmounted(){
   clearTimeout(this.maxValueTimer);
 },
 methods:{
+toggleMusic() {
+
+    if (!this.music)
+        return;
+
+    if (this.music.paused) {
+
+        this.music.play();
+
+    } else {
+
+        this.music.pause();
+
+    }
+
+},
 
 selectNewCardType(type){
   this.newCard.type = type;

@@ -20,6 +20,12 @@
         <span class="icon">📜</span>
         <span>Personnaliser la partie</span>
       </button>
+      <button class="label-edit-btn" @click="toggleMusic">
+        <span class="icon">
+            {{ music && !music.paused ? '🔊' : '🔇' }}
+        </span>
+      <span>Musique</span>
+      </button>
     </div>
 
     <section class="coin-panel glass-panel">
@@ -234,6 +240,12 @@
       </div>
     </div>
   </div>
+  <audio
+    id="bgMusic"
+    preload="auto"
+    >
+    <source src="audio/gwent.mp3" type="audio/mpeg">
+  </audio>
   <script src="app.js"></script>
 </body>
 </html>
