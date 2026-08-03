@@ -71,7 +71,7 @@ mounted(){
   });
 
   const loopStart = 1;
-  const loopEnd = 289;
+  const loopEnd = 290;
 
   this.music.volume = 0.35;
 
