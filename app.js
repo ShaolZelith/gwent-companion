@@ -31,7 +31,11 @@ burningCardKeys:[],
 maxValueTimer:null,
 burnAnimationTimer:null,
 music:null,
-musicStarted:false
+musicStarted:false,
+showMusicMenu:false,
+currentMusic:'mandragora',
+currentMusicName:'Mandragora',
+isMusicPlaying:false
 }
 },
 created(){
@@ -59,49 +63,31 @@ mounted(){
   // ==========================
 
   this.music = document.getElementById("bgMusic");
-  console.log(this.music);
-  console.log(this.music.currentSrc);
 
-  this.music.addEventListener("error", () => {
-      console.error("Erreur de chargement du MP3");
-  });
+this.loopStart = 0;
+this.loopEnd = 289;
 
-  this.music.addEventListener("canplay", () => {
-      console.log("MP3 chargé");
-  });
+this.music.volume = 0.35;
 
-  const loopStart = 1;
-  const loopEnd = 290;
-
-  this.music.volume = 0.35;
-
-  const loop = () => {
+const loop = () => {
 
     if (!this.music.paused) {
 
-      if (this.music.currentTime >= loopEnd) {
-        this.music.currentTime = loopStart;
-      }
+        if (
+            this.loopEnd !== null &&
+            this.music.currentTime >= this.loopEnd
+        ) {
+            this.music.currentTime = this.loopStart;
+        }
 
-      requestAnimationFrame(loop);
+        requestAnimationFrame(loop);
     }
 
-  };
+};
 
-  this.music.addEventListener("play", () => {
+this.music.addEventListener("play", () => {
     requestAnimationFrame(loop);
-  });
-
-  window.addEventListener("pointerdown", () => {
-
-    if (this.musicStarted) return;
-
-    this.musicStarted = true;
-    this.music.currentTime = loopStart;
-
-    this.music.play().catch(() => {});
-
-  }, { once:true });
+});
 
 },
 unmounted(){
@@ -110,20 +96,88 @@ unmounted(){
   clearTimeout(this.maxValueTimer);
 },
 methods:{
-toggleMusic() {
+toggleMusic(){
 
-    if (!this.music)
-        return;
+    if(!this.music) return;
 
-    if (this.music.paused) {
+    if(this.music.paused){
 
-        this.music.play();
+        this.music.play()
+            .then(() => {
+                this.isMusicPlaying = true;
+            })
+            .catch(error => {
+                console.error("Erreur lecture :", error);
+                this.isMusicPlaying = false;
+            });
 
     } else {
 
         this.music.pause();
+        this.isMusicPlaying = false;
 
     }
+
+},
+
+toggleMusicMenu(){
+
+    this.showMusicMenu = !this.showMusicMenu;
+
+},
+
+selectMusic(type){
+
+    if(!this.music) return;
+
+    let file;
+
+    if(type === 'mandragora'){
+
+        this.currentMusic = 'mandragora';
+        this.currentMusicName = 'Mandragora';
+
+        file = 'audio/mandragora.mp3';
+
+        this.loopStart = 0;
+        this.loopEnd = 289;
+
+    }
+
+    if(type === 'bilgewater'){
+
+        this.currentMusic = 'bilgewater';
+        this.currentMusicName = 'Bilgewater';
+
+        file = 'audio/bilgewater.mp3';
+
+        this.loopStart = null;
+        this.loopEnd = null;
+
+    }
+
+    this.showMusicMenu = false;
+
+    // Stopper la musique actuelle
+    this.music.pause();
+
+    // Changer de fichier
+    this.music.src = file;
+    this.music.currentTime = 0;
+
+    // Lancer la nouvelle musique
+    this.music.play()
+        .then(() => {
+
+            this.isMusicPlaying = true;
+
+        })
+        .catch(error => {
+
+            this.isMusicPlaying = false;
+            console.error("Erreur audio :", error);
+
+        });
 
 },
 

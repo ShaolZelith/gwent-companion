@@ -20,12 +20,36 @@
         <span class="icon">📜</span>
         <span>Personnaliser la partie</span>
       </button>
-      <button class="label-edit-btn" @click="toggleMusic">
-        <span class="icon">
-            {{ music && !music.paused ? '🔊' : '🔇' }}
-        </span>
-      <span>Musique</span>
-      </button>
+      <div class="music-selector">
+
+    <!-- Choix de la musique -->
+    <button class="label-edit-btn" @click="toggleMusicMenu">
+        <span class="icon">🎵</span>
+        <span>{{ currentMusicName }}</span>
+    </button>
+
+    <!-- Play / Pause -->
+    <button
+    class="label-edit-btn music-play-btn"
+    @click="toggleMusic"
+>
+    <span class="icon">
+        {{ isMusicPlaying ? '⏸️' : '▶️' }}
+    </span>
+</button>
+
+    <!-- Menu déroulant -->
+    <div v-if="showMusicMenu" class="music-menu">
+        <button @click="selectMusic('mandragora')">
+            🌿 Mandragora
+        </button>
+
+        <button @click="selectMusic('bilgewater')">
+            🌊 Bilgewater
+        </button>
+    </div>
+
+</div>
     </div>
 
     <section class="coin-panel glass-panel">
@@ -244,7 +268,7 @@
     id="bgMusic"
     preload="auto"
     >
-    <source src="audio/gwent.mp3" type="audio/mpeg">
+    <source src="audio/mandragora.mp3" type="audio/mpeg">
   </audio>
   <script src="app.js"></script>
 </body>
