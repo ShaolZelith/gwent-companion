@@ -203,8 +203,12 @@ selectNewCardRow(row){
     this.newCard.value = row === 'range' ? 2 : 4;
   }
 },
-hasSkelligeFaction(){
-  return this.factionSelections.some(selectedIndex => this.factions[selectedIndex]?.id === 'skellige');
+selectNewCardPlayer(playerId){
+  this.newCard.player = playerId;
+  if(this.newCard.type === 'berzerker' && !this.isSkelligeFaction(playerId)){
+    this.newCard.type = 'normal';
+    this.newCard.value = 1;
+  }
 },
 selectHeroBonus(bonus){
   this.newCard.heroBonus = bonus;
@@ -236,6 +240,10 @@ flipPlayerToken(){
 cycleFaction(slot){
   const next = (this.factionSelections[slot] + 1) % this.factions.length;
   this.factionSelections.splice(slot, 1, next);
+  if(this.newCard.player === slot + 1 && this.newCard.type === 'berzerker' && !this.isSkelligeFaction(this.newCard.player)){
+    this.newCard.type = 'normal';
+    this.newCard.value = 1;
+  }
 },
 factionClass(playerId){
   const slot = playerId - 1;

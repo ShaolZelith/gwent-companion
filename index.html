@@ -81,8 +81,8 @@
       <div class="section-title">Ajouter une carte</div>
 
       <div class="button-grid players">
-        <button :class="{selected:newCard.player===1}" @click="newCard.player=1">{{playerNames[0]}}</button>
-        <button :class="{selected:newCard.player===2}" @click="newCard.player=2">{{playerNames[1]}}</button>
+        <button :class="{selected:newCard.player===1}" @click="selectNewCardPlayer(1)">{{playerNames[0]}}</button>
+        <button :class="{selected:newCard.player===2}" @click="selectNewCardPlayer(2)">{{playerNames[1]}}</button>
       </div>
 
       <div class="button-grid rows">
@@ -91,7 +91,7 @@
         <button :class="{selected:newCard.row==='siege'}" @click="selectNewCardRow('siege')">🏰</button>
       </div>
 
-      <div :class="['button-grid', 'types', { 'skellige-types': hasSkelligeFaction() }]">
+      <div :class="['button-grid', 'types', { 'skellige-types': isSkelligeFaction(newCard.player) }]">
         <button :class="{selected:newCard.type==='normal'}" @click="selectNewCardType('normal')">👤</button>
         <button :class="{selected:newCard.type==='hero'}" @click="selectNewCardType('hero')">⭐</button>
         <button :class="{selected:newCard.type==='morale'}" @click="selectNewCardType('morale')">💪</button>
@@ -99,7 +99,7 @@
         <button :class="{selected:newCard.type==='jaskier'}" @click="selectNewCardType('jaskier')">🎭</button>
         <button :class="{selected:newCard.type==='vache'}" @click="selectNewCardType('vache'); newCard.value = 0">🐄</button>
         <button :class="{selected:newCard.type==='villentretenmerth'}" @click="selectNewCardType('villentretenmerth')">🔥</button>
-        <button v-if="hasSkelligeFaction()" :class="{selected:newCard.type==='berzerker'}" @click="selectNewCardType('berzerker')">🐻</button>
+        <button v-if="isSkelligeFaction(newCard.player)" :class="{selected:newCard.type==='berzerker'}" @click="selectNewCardType('berzerker')">🐻</button>
       </div>
 
       <div v-if="newCard.type==='hero'" class="button-grid hero-bonus-grid">
