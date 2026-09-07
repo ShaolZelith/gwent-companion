@@ -187,9 +187,21 @@ selectNewCardType(type){
     this.newCard.value = 2;
     this.newCard.row = 'melee';
   }
+  if(type === 'berzerker'){
+    this.newCard.value = this.newCard.row === 'range' ? 2 : 4;
+  }
   if(type !== 'hero'){
     this.newCard.heroBonus = 'none';
   }
+},
+selectNewCardRow(row){
+  this.newCard.row = row;
+  if(this.newCard.type === 'berzerker'){
+    this.newCard.value = row === 'range' ? 2 : 4;
+  }
+},
+hasSkelligeFaction(){
+  return this.factionSelections.some(selectedIndex => this.factions[selectedIndex]?.id === 'skellige');
 },
 selectHeroBonus(bonus){
   this.newCard.heroBonus = bonus;
@@ -201,6 +213,9 @@ rowsForPlayer(){
 cardIcons(c){
   if(c.type === 'hero'){
     return c.heroBonus === 'morale' ? ['⭐','💪'] : ['⭐'];
+  }
+  if(c.type === 'berzerker'){
+    return c.transformed ? ['🐻', c.row === 'range' ? '🤝' : '💪'] : ['🐻'];
   }
   return [{hero:'⭐',morale:'💪',bond:'🤝',jaskier:'🎭',vache:'🐄',villentretenmerth:'💥'}[c.type] || ''];
 },
@@ -357,11 +372,20 @@ handleKeydown(event){
 },
 addCard(){
 const p=this.players[this.newCard.player-1];
-const cardValue = this.newCard.type === 'vache' ? 0 : this.newCard.value;
+if(this.newCard.type === 'berzerker' && !this.isSkelligeFaction(this.newCard.player)) return;
+const cardValue = this.newCard.type === 'vache' ? 0 : this.newCard.type === 'berzerker'
+  ? (this.newCard.row === 'range' ? 2 : 4)
+  : this.newCard.value;
 const card = this.newCard.type === 'hero'
   ? {value:cardValue, type:this.newCard.type, heroBonus:this.newCard.heroBonus || 'none'}
+  : this.newCard.type === 'berzerker'
+    ? {value:cardValue, type:this.newCard.type, row:this.newCard.row, transformed:false}
   : {value:cardValue, type:this.newCard.type};
 p[this.newCard.row].cards.push(card);
+
+if(card.type === 'berzerker' && p[this.newCard.row].mushroom){
+  this.transformBerzerkers(p, this.newCard.row);
+}
 
 if(card.type === 'villentretenmerth'){
   this.triggerVillentretenmerthEffect(this.newCard.player, this.newCard.row);
@@ -539,6 +563,18 @@ weatherCardClass(row){
 hasJaskier(p,row){
 return p[row].cards.some(c=>c.type==="jaskier");
 },
+transformBerzerkers(p,row){
+  if(!p[row].mushroom) return;
+  p[row].cards.forEach(card => {
+    if(card.type === 'berzerker'){
+      card.transformed = true;
+      card.transformedAbility = row === 'melee' ? 'morale' : 'bond';
+    }
+  });
+},
+toggleMushroom(p,row){
+  this.transformBerzerkers(p,row);
+},
 displayedCards(p,row){
   const cards = p[row].cards.map((card,index)=>({card,index}));
   const jaskierCards = cards.filter(item=>item.card.type==="jaskier");
@@ -594,21 +630,28 @@ cardPosition(index, count, p, row){
   };
 },
 effective(card,p,row){
-let v=card.value;
+let v=card.transformed
+  ? (row === 'melee' ? 14 : 8)
+  : card.value;
 
 // 1 météo
 if(card.type!=="hero" && this.weatherOnRow(row))
     v=1;
 
 // 2 lien serré
-if(card.type==="bond"){
-    const n=p[row].cards.filter(c=>c.type==="bond"&&c.value===card.value).length;
+const isBondCard = card.type === 'bond' || (card.type === 'berzerker' && card.transformed && card.transformedAbility === 'bond');
+if(isBondCard){
+    const n=p[row].cards.filter(c =>
+      (card.type === 'berzerker' && card.transformed && card.transformedAbility === 'bond')
+        ? (c.type === 'berzerker' && c.transformed && c.transformedAbility === 'bond')
+        : (c.type === 'bond' && c.value === card.value)
+    ).length;
     if(n>1) v*=n;
 }
 
 // 3 moral
-const isMoraleCard = card.type === "morale";
-const moraleCards=p[row].cards.filter(c=>c.type === "morale" || (c.type === "hero" && c.heroBonus === "morale")).length;
+const isMoraleCard = card.type === "morale" || (card.type === 'berzerker' && card.transformed && card.transformedAbility === 'morale');
+const moraleCards=p[row].cards.filter(c=>c.type === "morale" || (c.type === "hero" && c.heroBonus === "morale") || (c.type === 'berzerker' && c.transformed && c.transformedAbility === 'morale')).length;
 if(card.type!=="hero" && moraleCards>0){
     v+=moraleCards-(isMoraleCard?1:0);
 }

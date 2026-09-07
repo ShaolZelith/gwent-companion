@@ -86,9 +86,9 @@
       </div>
 
       <div class="button-grid rows">
-        <button :class="{selected:newCard.row==='melee'}" @click="newCard.row='melee'">⚔️</button>
-        <button :class="{selected:newCard.row==='range'}" @click="newCard.row='range'">🏹</button>
-        <button :class="{selected:newCard.row==='siege'}" @click="newCard.row='siege'">🏰</button>
+        <button :class="{selected:newCard.row==='melee'}" @click="selectNewCardRow('melee')">⚔️</button>
+        <button :class="{selected:newCard.row==='range'}" @click="selectNewCardRow('range')">🏹</button>
+        <button :class="{selected:newCard.row==='siege'}" @click="selectNewCardRow('siege')">🏰</button>
       </div>
 
       <div class="button-grid types">
@@ -99,6 +99,7 @@
         <button :class="{selected:newCard.type==='jaskier'}" @click="selectNewCardType('jaskier')">🎭</button>
         <button :class="{selected:newCard.type==='vache'}" @click="selectNewCardType('vache'); newCard.value = 0">🐄</button>
         <button :class="{selected:newCard.type==='villentretenmerth'}" @click="selectNewCardType('villentretenmerth')">💥</button>
+        <button v-if="hasSkelligeFaction()" :class="{selected:newCard.type==='berzerker'}" @click="selectNewCardType('berzerker')">🐻</button>
       </div>
 
       <div v-if="newCard.type==='hero'" class="button-grid hero-bonus-grid">
@@ -152,7 +153,7 @@
 
             <div v-if="isSkelligeFaction(p.id)" class="line-cell line-mushroom">
               <label class="mushroom-toggle">
-                <input type="checkbox" v-model="p[r.id].mushroom">
+                <input type="checkbox" v-model="p[r.id].mushroom" @change="toggleMushroom(p, r.id)">
                 <span :class="{active: p[r.id].mushroom}">🍄</span>
               </label>
             </div>
