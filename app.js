@@ -183,6 +183,10 @@ selectMusic(type){
 
 selectNewCardType(type){
   this.newCard.type = type;
+  if(type === 'jaskier'){
+    this.newCard.value = 2;
+    this.newCard.row = 'melee';
+  }
   if(type !== 'hero'){
     this.newCard.heroBonus = 'none';
   }
