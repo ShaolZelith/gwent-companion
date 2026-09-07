@@ -42,9 +42,9 @@ created(){
 for(let i=1;i<=2;i++){
 this.players.push({
 id:i,
-melee:{cards:[],horn:false},
-range:{cards:[],horn:false},
-siege:{cards:[],horn:false}
+melee:{cards:[],horn:false,mushroom:false},
+range:{cards:[],horn:false,mushroom:false},
+siege:{cards:[],horn:false,mushroom:false}
 });
 }
 },
@@ -246,6 +246,11 @@ isMonsterFaction(playerId){
   const selectedIndex = this.factionSelections[slot] || 0;
   return this.factions[selectedIndex]?.id === 'monsters';
 },
+isSkelligeFaction(playerId){
+  const slot = playerId - 1;
+  const selectedIndex = this.factionSelections[slot] || 0;
+  return this.factions[selectedIndex]?.id === 'skellige';
+},
 monsterUnitCandidates(playerId){
   const player = this.players[playerId - 1];
   if(!player) return [];
@@ -310,10 +315,13 @@ resetGame(){
 
     p.melee.cards=[];
     p.melee.horn=false;
+    p.melee.mushroom=false;
     p.range.cards=[];
     p.range.horn=false;
+    p.range.mushroom=false;
     p.siege.cards=[];
     p.siege.horn=false;
+    p.siege.mushroom=false;
   });
 
   transformedVacheCards.forEach(({playerId, card}) => {

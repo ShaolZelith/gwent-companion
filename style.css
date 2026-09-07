@@ -770,6 +770,14 @@ button{
   border:1px solid rgba(92,138,220,0.50);
   box-shadow:0 0 0 1px rgba(82,134,220,0.16), 0 0 24px rgba(38,92,194,0.24), inset 0 0 18px rgba(55,108,210,0.18);
 }
+.row-line.skellige-aura{
+  position:relative;
+  border-radius:18px;
+  padding:8px 10px;
+  background:linear-gradient(90deg, rgba(71,184,91,0.24) 0%, rgba(71,184,91,0.12) 50%, rgba(47,143,67,0.22) 100%);
+  border:1px solid rgba(104,218,116,0.56);
+  box-shadow:0 0 0 1px rgba(100,218,112,0.18), 0 0 22px rgba(55,184,73,0.30), inset 0 0 18px rgba(92,215,104,0.16);
+}
 .row-line.weather-cold .line-icon .row-icon,
 .row-line.weather-fog .line-icon .row-icon,
 .row-line.weather-rain .line-icon .row-icon,
@@ -789,6 +797,12 @@ button{
 }
 .player-right .row-line{
   grid-template-columns:60px minmax(0,1fr) 40px 40px;
+}
+.row-line.skellige-row{
+  grid-template-columns:40px 40px 40px minmax(0,1fr) 60px;
+}
+.player-right .row-line.skellige-row{
+  grid-template-columns:60px minmax(0,1fr) 40px 40px 40px;
 }
 .line-cell{
   min-width:0;
@@ -843,6 +857,28 @@ button{
   transform: scale(1.05);
 }
 .horn-toggle input{
+  display:none;
+}
+.mushroom-toggle{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+.mushroom-toggle span{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  transition:box-shadow 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+.mushroom-toggle span.active{
+  box-shadow:0 0 0 4px rgba(93,220,105,0.55);
+  background:rgba(93,220,105,0.16);
+  transform:scale(1.05);
+}
+.mushroom-toggle input{
   display:none;
 }
 .cards{

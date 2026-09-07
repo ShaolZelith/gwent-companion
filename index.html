@@ -142,11 +142,18 @@
         </div>
 
         <div class="row-panel" v-for="r in rowsForPlayer(p)" :key="r.id">
-          <div :class="['row-line', p.id===1 ? 'player-left' : 'player-right', weatherRowClass(r.id), { 'weather-active-row': isWeatherActiveRow(r.id) }]">
+          <div :class="['row-line', p.id===1 ? 'player-left' : 'player-right', weatherRowClass(r.id), { 'weather-active-row': isWeatherActiveRow(r.id), 'skellige-row': isSkelligeFaction(p.id), 'skellige-aura': isSkelligeFaction(p.id) && p[r.id].mushroom }]">
             <div class="line-cell line-horn">
               <label class="horn-toggle">
                 <input type="checkbox" v-model="p[r.id].horn">
                 <span :class="{active: p[r.id].horn}">📯</span>
+              </label>
+            </div>
+
+            <div v-if="isSkelligeFaction(p.id)" class="line-cell line-mushroom">
+              <label class="mushroom-toggle">
+                <input type="checkbox" v-model="p[r.id].mushroom">
+                <span :class="{active: p[r.id].mushroom}">🍄</span>
               </label>
             </div>
 
