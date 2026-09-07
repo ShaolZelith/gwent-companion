@@ -15,16 +15,17 @@ body{
   padding:0;
   background-color:#120a05;
   background-image:
-    radial-gradient(circle at top left, rgba(255,255,255,0.06), transparent 24%),
-    radial-gradient(circle at bottom right, rgba(255,255,255,0.04), transparent 22%),
-    linear-gradient(180deg, rgba(62,45,32,0.85), rgba(5,3,2,0.95));
+    linear-gradient(rgba(5,5,5,0.30), rgba(5,5,5,0.42)),
+    url('Background.png');
   background-size:cover;
+  background-position:center center;
+  background-attachment:fixed;
 }
 body::before{
   content:'';
   position:fixed;
   inset:0;
-  background-image:linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background:rgba(0,0,0,0.08);
   pointer-events:none;
 }
 button, input{
