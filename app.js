@@ -190,6 +190,14 @@ selectNewCardType(type){
   if(type === 'berzerker'){
     this.newCard.value = this.newCard.row === 'range' ? 2 : 4;
   }
+  if(type === 'kambi'){
+    this.newCard.value = 0;
+    this.newCard.row = 'range';
+  }
+  if(type === 'vache'){
+    this.newCard.value = 0;
+    this.newCard.row = 'range';
+  }
   if(type === 'villentretenmerth'){
     this.newCard.value = 7;
   }
@@ -205,7 +213,7 @@ selectNewCardRow(row){
 },
 selectNewCardPlayer(playerId){
   this.newCard.player = playerId;
-  if(this.newCard.type === 'berzerker' && !this.isSkelligeFaction(playerId)){
+  if(['berzerker','kambi'].includes(this.newCard.type) && !this.isSkelligeFaction(playerId)){
     this.newCard.type = 'normal';
     this.newCard.value = 1;
   }
@@ -224,7 +232,7 @@ cardIcons(c){
   if(c.type === 'berzerker'){
     return c.transformed ? ['🐻', c.row === 'range' ? '🤝' : '💪'] : ['🐻'];
   }
-  return [{hero:'⭐',morale:'💪',bond:'🤝',jaskier:'🎭',vache:'🐄',villentretenmerth:'🔥'}[c.type] || ''];
+  return [{hero:'⭐',morale:'💪',bond:'🤝',jaskier:'🎭',vache:'🐄',villentretenmerth:'🔥',kambi:'🐓'}[c.type] || ''];
 },
 toggleWeather(id){this.weather[id]=!this.weather[id]; this.$nextTick(()=>setTimeout(this.updateRowWidths, 50))},
 clearWeather(){Object.keys(this.weather).forEach(k=>this.weather[k]=false); this.$nextTick(()=>setTimeout(this.updateRowWidths, 50))},
@@ -240,7 +248,10 @@ flipPlayerToken(){
 cycleFaction(slot){
   const next = (this.factionSelections[slot] + 1) % this.factions.length;
   this.factionSelections.splice(slot, 1, next);
-  if(this.newCard.player === slot + 1 && this.newCard.type === 'berzerker' && !this.isSkelligeFaction(this.newCard.player)){
+  if(this.isSkelligeFaction(slot + 1)){
+    this.newCard.player = slot + 1;
+  }
+  if(this.newCard.player === slot + 1 && ['berzerker','kambi'].includes(this.newCard.type) && !this.isSkelligeFaction(this.newCard.player)){
     this.newCard.type = 'normal';
     this.newCard.value = 1;
   }
@@ -329,12 +340,16 @@ resetGame(){
   this.clearWeather();
   this.clearMaxValueHighlight();
   const transformedVacheCards = [];
+  const transformedKambiCards = [];
 
   this.players.forEach(p=>{
     ['melee','range','siege'].forEach(row => {
       p[row].cards.forEach(card => {
         if(card.type === 'vache'){
           transformedVacheCards.push({playerId: p.id, card: {value: 8, type: 'normal'}});
+        }
+        if(card.type === 'kambi'){
+          transformedKambiCards.push({playerId: p.id, card: {value: 11, type: 'hero', heroBonus: 'none'}});
         }
       });
     });
@@ -351,6 +366,9 @@ resetGame(){
   });
 
   transformedVacheCards.forEach(({playerId, card}) => {
+    this.players[playerId - 1].melee.cards.push(card);
+  });
+  transformedKambiCards.forEach(({playerId, card}) => {
     this.players[playerId - 1].melee.cards.push(card);
   });
 
@@ -383,8 +401,8 @@ handleKeydown(event){
 },
 addCard(){
 const p=this.players[this.newCard.player-1];
-if(this.newCard.type === 'berzerker' && !this.isSkelligeFaction(this.newCard.player)) return;
-const cardValue = this.newCard.type === 'vache' ? 0 : this.newCard.type === 'berzerker'
+if(['berzerker','kambi'].includes(this.newCard.type) && !this.isSkelligeFaction(this.newCard.player)) return;
+const cardValue = ['vache','kambi'].includes(this.newCard.type) ? 0 : this.newCard.type === 'berzerker'
   ? (this.newCard.row === 'range' ? 2 : 4)
   : this.newCard.value;
 const card = this.newCard.type === 'hero'

@@ -100,6 +100,7 @@
         <button :class="{selected:newCard.type==='vache'}" @click="selectNewCardType('vache'); newCard.value = 0">🐄</button>
         <button :class="{selected:newCard.type==='villentretenmerth'}" @click="selectNewCardType('villentretenmerth')">🔥</button>
         <button v-if="isSkelligeFaction(newCard.player)" :class="{selected:newCard.type==='berzerker'}" @click="selectNewCardType('berzerker')">🐻</button>
+        <button v-if="isSkelligeFaction(newCard.player)" :class="{selected:newCard.type==='kambi'}" @click="selectNewCardType('kambi')">🐓</button>
       </div>
 
       <div v-if="newCard.type==='hero'" class="button-grid hero-bonus-grid">
