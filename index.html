@@ -91,14 +91,14 @@
         <button :class="{selected:newCard.row==='siege'}" @click="selectNewCardRow('siege')">🏰</button>
       </div>
 
-      <div class="button-grid types">
+      <div :class="['button-grid', 'types', { 'skellige-types': hasSkelligeFaction() }]">
         <button :class="{selected:newCard.type==='normal'}" @click="selectNewCardType('normal')">👤</button>
         <button :class="{selected:newCard.type==='hero'}" @click="selectNewCardType('hero')">⭐</button>
         <button :class="{selected:newCard.type==='morale'}" @click="selectNewCardType('morale')">💪</button>
         <button :class="{selected:newCard.type==='bond'}" @click="selectNewCardType('bond')">🤝</button>
         <button :class="{selected:newCard.type==='jaskier'}" @click="selectNewCardType('jaskier')">🎭</button>
         <button :class="{selected:newCard.type==='vache'}" @click="selectNewCardType('vache'); newCard.value = 0">🐄</button>
-        <button :class="{selected:newCard.type==='villentretenmerth'}" @click="selectNewCardType('villentretenmerth')">💥</button>
+        <button :class="{selected:newCard.type==='villentretenmerth'}" @click="selectNewCardType('villentretenmerth')">🔥</button>
         <button v-if="hasSkelligeFaction()" :class="{selected:newCard.type==='berzerker'}" @click="selectNewCardType('berzerker')">🐻</button>
       </div>
 

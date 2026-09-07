@@ -190,6 +190,9 @@ selectNewCardType(type){
   if(type === 'berzerker'){
     this.newCard.value = this.newCard.row === 'range' ? 2 : 4;
   }
+  if(type === 'villentretenmerth'){
+    this.newCard.value = 7;
+  }
   if(type !== 'hero'){
     this.newCard.heroBonus = 'none';
   }
@@ -217,7 +220,7 @@ cardIcons(c){
   if(c.type === 'berzerker'){
     return c.transformed ? ['🐻', c.row === 'range' ? '🤝' : '💪'] : ['🐻'];
   }
-  return [{hero:'⭐',morale:'💪',bond:'🤝',jaskier:'🎭',vache:'🐄',villentretenmerth:'💥'}[c.type] || ''];
+  return [{hero:'⭐',morale:'💪',bond:'🤝',jaskier:'🎭',vache:'🐄',villentretenmerth:'🔥'}[c.type] || ''];
 },
 toggleWeather(id){this.weather[id]=!this.weather[id]; this.$nextTick(()=>setTimeout(this.updateRowWidths, 50))},
 clearWeather(){Object.keys(this.weather).forEach(k=>this.weather[k]=false); this.$nextTick(()=>setTimeout(this.updateRowWidths, 50))},

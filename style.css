@@ -505,6 +505,9 @@ button{
   grid-template-columns:repeat(3,1fr);
 }
 .button-grid.types{
+  grid-template-columns:repeat(7, minmax(0, 1fr));
+}
+.button-grid.types.skellige-types{
   grid-template-columns:repeat(8, minmax(0, 1fr));
 }
 .button-grid.hero-bonus-grid{
