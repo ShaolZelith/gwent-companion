@@ -625,29 +625,29 @@ button{
   max-width:100%;
 }
 .player-board.faction-board-nilfgaard{
-  background:linear-gradient(180deg, rgba(10,9,7,0.86), rgba(8,7,6,0.92));
-  border-color:rgba(255,215,101,0.12);
-  box-shadow:0 8px 22px rgba(0,0,0,0.22), inset 0 0 0 1px rgba(255,215,101,0.04);
+  background:linear-gradient(180deg, rgba(34,28,17,0.90), rgba(13,10,7,0.94));
+  border-color:rgba(255,215,101,0.26);
+  box-shadow:0 8px 22px rgba(0,0,0,0.22), 0 0 24px rgba(190,145,48,0.10), inset 0 0 0 1px rgba(255,215,101,0.09);
 }
 .player-board.faction-board-northern{
-  background:linear-gradient(180deg, rgba(8,14,28,0.80), rgba(6,9,16,0.88));
-  border-color:rgba(173,199,255,0.10);
-  box-shadow:0 8px 22px rgba(0,0,0,0.20), inset 0 0 0 1px rgba(173,199,255,0.03);
+  background:linear-gradient(180deg, rgba(15,31,61,0.88), rgba(7,13,25,0.93));
+  border-color:rgba(173,199,255,0.24);
+  box-shadow:0 8px 22px rgba(0,0,0,0.20), 0 0 24px rgba(87,133,207,0.12), inset 0 0 0 1px rgba(173,199,255,0.08);
 }
 .player-board.faction-board-skellige{
-  background:linear-gradient(180deg, rgba(18,14,36,0.82), rgba(10,6,16,0.90));
-  border-color:rgba(191,176,255,0.10);
-  box-shadow:0 8px 22px rgba(0,0,0,0.20), inset 0 0 0 1px rgba(191,176,255,0.03);
+  background:linear-gradient(180deg, rgba(42,28,75,0.88), rgba(15,8,28,0.93));
+  border-color:rgba(191,176,255,0.24);
+  box-shadow:0 8px 22px rgba(0,0,0,0.20), 0 0 24px rgba(130,91,205,0.14), inset 0 0 0 1px rgba(191,176,255,0.08);
 }
 .player-board.faction-board-scoiatel{
-  background:linear-gradient(180deg, rgba(10,32,14,0.82), rgba(6,16,8,0.90));
-  border-color:rgba(87,202,118,0.12);
-  box-shadow:0 8px 22px rgba(0,0,0,0.20), inset 0 0 0 1px rgba(87,202,118,0.03);
+  background:linear-gradient(180deg, rgba(17,58,25,0.88), rgba(7,23,11,0.93));
+  border-color:rgba(87,202,118,0.26);
+  box-shadow:0 8px 22px rgba(0,0,0,0.20), 0 0 24px rgba(55,170,79,0.13), inset 0 0 0 1px rgba(87,202,118,0.08);
 }
 .player-board.faction-board-monsters{
-  background:linear-gradient(180deg, rgba(50,10,12,0.82), rgba(26,6,8,0.90));
-  border-color:rgba(247,95,94,0.12);
-  box-shadow:0 8px 22px rgba(0,0,0,0.20), inset 0 0 0 1px rgba(247,95,94,0.03);
+  background:linear-gradient(180deg, rgba(78,17,20,0.88), rgba(35,7,10,0.93));
+  border-color:rgba(247,95,94,0.25);
+  box-shadow:0 8px 22px rgba(0,0,0,0.20), 0 0 24px rgba(190,48,48,0.13), inset 0 0 0 1px rgba(247,95,94,0.08);
 }
 .player-board.faction-board-nilfgaard .player-score,
 .player-board.faction-board-nilfgaard .score-value{
